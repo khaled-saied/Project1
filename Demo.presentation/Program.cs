@@ -1,3 +1,10 @@
+//using Demo.DAL.Data.Contexts;
+//using Demo.DAL.Data.Contexts;
+using Demo.BLL.Services;
+using Demo.DAL.Data.Contexts;
+using Demo.DAL.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 namespace Demo.presentation
 {
     public class Program
@@ -6,12 +13,27 @@ namespace Demo.presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            
+            #region Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            //builder.Services.AddScoped<ApplicationDbContext>();
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                //options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
+                //options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["DefaultConnection"]);
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
+
+            #endregion
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+
+            #region Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
@@ -24,11 +46,13 @@ namespace Demo.presentation
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            #endregion
 
             app.Run();
         }
