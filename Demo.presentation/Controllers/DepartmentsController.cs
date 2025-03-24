@@ -52,8 +52,18 @@ namespace Demo.presentation.Controllers
                 }
             }
             return View(departmentDto);
-        } 
+        }
 
+        #endregion
+
+        #region Details
+        public IActionResult Details(int? id)
+        {
+            if(!id.HasValue) return BadRequest();
+            var department = _departmentServices.GetDepartmentById(id.Value);
+            if (department == null) return NotFound();
+            return View(department);
+        }
         #endregion
     }
 }
