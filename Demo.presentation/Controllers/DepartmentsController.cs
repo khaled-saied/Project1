@@ -132,5 +132,51 @@ namespace Demo.presentation.Controllers
 
         #endregion
 
+        #region Delete
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (!id.HasValue) return BadRequest();
+            var department = _departmentServices.GetDepartmentById(id.Value);
+            if (department == null) return NotFound();
+            return View(department);
+        }
+
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            if(id == 0) return BadRequest();
+            try
+            {
+                bool result = _departmentServices.RemoveDepartment(id);
+                if (result)
+                    return RedirectToAction(nameof(Index));
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Department was not deleted");
+                    return RedirectToAction(nameof(Delete), new { id });
+                }
+            }
+            catch (Exception ex)
+            {
+                //log Exception
+                if (_webHostEnvironment.IsDevelopment())
+                {
+                    //1- Devolpment=> log error in console and return error message to user
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    //2-Deployment=> log error in file or database and return  error view,
+                    _logger.LogError(ex.Message);
+                    return View("ErrorView", ex);
+                }
+            }
+        }
+
+        #endregion
+
     }
 }
