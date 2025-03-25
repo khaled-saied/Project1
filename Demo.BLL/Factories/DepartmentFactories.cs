@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Demo.BLL.DataTransferObjects;
-using Demo.DAL.Models;
+using Demo.DAL.Models.DepartmentModels;
 
 namespace Demo.BLL.Factories
 {
