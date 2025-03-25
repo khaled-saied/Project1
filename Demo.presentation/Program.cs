@@ -1,8 +1,8 @@
-//using Demo.DAL.Data.Contexts;
-//using Demo.DAL.Data.Contexts;
-using Demo.BLL.Services;
+using Demo.BLL.Services.DepartmentsServices;
+using Demo.BLL.Services.ServicesOfEmployee;
 using Demo.DAL.Data.Contexts;
-using Demo.DAL.Repositories;
+using Demo.DAL.Repositories.Classes;
+using Demo.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.presentation
@@ -25,8 +25,13 @@ namespace Demo.presentation
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            //Department
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
+            //Employee
+            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
+
 
             #endregion
 

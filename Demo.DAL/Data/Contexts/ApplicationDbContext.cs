@@ -1,4 +1,6 @@
 ﻿
+using Demo.DAL.Models.DepartmentModels;
+
 namespace Demo.DAL.Data.Contexts
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)

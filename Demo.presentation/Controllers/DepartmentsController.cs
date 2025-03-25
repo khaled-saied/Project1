@@ -1,0 +1,182 @@
+﻿using Demo.BLL.DataTransferObjects.DepartmentDto;
+using Demo.BLL.Services.DepartmentsServices;
+using Demo.presentation.ViewModels.DepartmentViewModel;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Demo.presentation.Controllers
+{
+    public class DepartmentsController(IDepartmentServices _departmentServices,
+        ILogger<DepartmentsController> _logger,
+        IWebHostEnvironment _webHostEnvironment) : Controller
+    {
+        public IActionResult Index()
+        {
+            var departments = _departmentServices.GetAllDepartments();
+            return View(departments);
+        }
+
+        #region Create Department
+        [HttpGet]
+        public IActionResult Create() => View();
+
+        [HttpPost]
+        public IActionResult Create(CreatedDepartmentDto departmentDto)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    int result = _departmentServices.AddDepartment(departmentDto);
+                    if (result > 0)
+                        return RedirectToAction(nameof(Index));
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Department was not created");
+                        //return View(departmentDto);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //log Exception
+                    if (_webHostEnvironment.IsDevelopment())
+                    {
+                        //1- Devolpment=> log error in console and return error message to user
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                        //return View(departmentDto);
+                    }
+                    else
+                    {
+                        //2-Deployment=> log error in file or database and return  error view,
+                        _logger.LogError(ex.Message);
+                        //return View(departmentDto);
+                    }
+                }
+            }
+            return View(departmentDto);
+        }
+
+        #endregion
+
+        #region Details
+        public IActionResult Details(int? id)
+        {
+            if(!id.HasValue) return BadRequest();
+            var department = _departmentServices.GetDepartmentById(id.Value);
+            if (department == null) return NotFound();
+            return View(department);
+        }
+        #endregion
+
+        #region Edit
+
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (!id.HasValue) return BadRequest();
+            var department = _departmentServices.GetDepartmentById(id.Value);
+            if (department == null) return NotFound();
+            var DepartmentViewModel = new DepartmentEditViewModel
+            {
+                Code = department.Code,
+                Name = department.Name,
+                Descreption = department.Descreption,
+                DateOfCreation = department.CreatedOn
+            };
+            return View(DepartmentViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Edit([FromRoute]int id,DepartmentEditViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var updatedDepartment = new UpdatedDepartmentDto()
+                    {
+                        Id = id,
+                        Code = viewModel.Code,
+                        Name = viewModel.Name,
+                        Description = viewModel.Descreption,
+                        DateOfCreation = viewModel.DateOfCreation
+                    };
+
+                    int result = _departmentServices.UpdateDepartment(updatedDepartment);
+                    if (result > 0)
+                        return RedirectToAction(nameof(Index));
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Department was not updated");
+                        //return View(departmentDto);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //log Exception
+                    if (_webHostEnvironment.IsDevelopment())
+                    {
+                        //1- Devolpment=> log error in console and return error message to user
+                        ModelState.AddModelError(string.Empty, ex.Message);
+                        //return View(departmentDto);
+                    }
+                    else
+                    {
+                        //2-Deployment=> log error in file or database and return  error view,
+                        _logger.LogError(ex.Message);
+                        return View("ErrorView",ex);
+                    }
+                }
+            }
+            return View(viewModel);
+        }
+
+        #endregion
+
+        #region Delete
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (!id.HasValue) return BadRequest();
+            var department = _departmentServices.GetDepartmentById(id.Value);
+            if (department == null) return NotFound();
+            return View(department);
+        }
+
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            if(id == 0) return BadRequest();
+            try
+            {
+                bool result = _departmentServices.RemoveDepartment(id);
+                if (result)
+                    return RedirectToAction(nameof(Index));
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Department was not deleted");
+                    return RedirectToAction(nameof(Delete), new { id });
+                }
+            }
+            catch (Exception ex)
+            {
+                //log Exception
+                if (_webHostEnvironment.IsDevelopment())
+                {
+                    //1- Devolpment=> log error in console and return error message to user
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    //2-Deployment=> log error in file or database and return  error view,
+                    _logger.LogError(ex.Message);
+                    return View("ErrorView", ex);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+}

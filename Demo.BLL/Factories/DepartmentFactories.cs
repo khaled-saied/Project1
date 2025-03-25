@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Demo.BLL.DataTransferObjects;
-using Demo.DAL.Models;
+using Demo.BLL.DataTransferObjects.DepartmentDto;
+using Demo.DAL.Models.DepartmentModels;
 
 namespace Demo.BLL.Factories
 {
@@ -46,7 +46,7 @@ namespace Demo.BLL.Factories
             {
                 Name = departmentDto.Name,
                 Code = departmentDto.Code,
-                CreatedOn = departmentDto.DateOfCreation.ToDateTime(new TimeOnly())
+                CreatedOn = departmentDto.DateOfCreation.ToDateTime(new TimeOnly()),
                 Description = departmentDto.Description,
             };
         }
@@ -56,7 +56,7 @@ namespace Demo.BLL.Factories
             Id = departmentDto.Id,
             Name = departmentDto.Name,
             Code = departmentDto.Code,
-            CreatedOn = departmentDto.DateOfCreation.ToDateTime(new TimeOnly())
+            CreatedOn = departmentDto.DateOfCreation.ToDateTime(new TimeOnly()),
             Description = departmentDto.Description,
         };
 
