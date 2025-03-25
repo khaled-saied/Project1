@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Demo.BLL.DataTransferObjects;
 using Demo.BLL.Factories;
 using Demo.DAL.Models;
-using Demo.DAL.Repositories;
+using Demo.DAL.Repositories.Interfaces;
 
 namespace Demo.BLL.Services
 {
