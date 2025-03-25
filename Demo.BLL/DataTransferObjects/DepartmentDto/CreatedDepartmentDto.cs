@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.BLL.DataTransferObjects
+namespace Demo.BLL.DataTransferObjects.DepartmentDto
 {
     public class CreatedDepartmentDto
     {

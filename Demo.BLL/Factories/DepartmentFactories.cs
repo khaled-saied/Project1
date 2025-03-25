@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Demo.BLL.DataTransferObjects;
+using Demo.BLL.DataTransferObjects.DepartmentDto;
 using Demo.DAL.Models.DepartmentModels;
 
 namespace Demo.BLL.Factories
