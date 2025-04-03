@@ -5,7 +5,7 @@ namespace Demo.BLL.Services.ServicesOfEmployee
     public interface IEmployeeServices
     {
         int AddEmployee(CreateEmployeeDto employeeDto);
-        IEnumerable<EmployeeDto> GetAllEmployees();
+        IEnumerable<EmployeeDto> GetAllEmployees(bool WithTracking= false);
         EmployeeDetailsDto? GetEmployeeById(int id);
         bool RemoveEmployee(int id);
         int UpdateEmployee(UpdateEmployeeDto employeeDto);

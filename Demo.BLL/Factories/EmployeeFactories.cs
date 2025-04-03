@@ -24,8 +24,8 @@ namespace Demo.BLL.Factories
                 Salary = E.Salary,
                 IsActive = E.IsActive,
                 Email = E.Email,
-                Gender = E.Gender,
-                EmployeeType = E.EmployeeType
+                Gender = E.Gender.ToString(),
+                EmployeeType = E.EmployeeType.ToString()
             };
         }
 
@@ -40,43 +40,46 @@ namespace Demo.BLL.Factories
                 Salary = E.Salary,
                 IsActive = E.IsActive,
                 Email = E.Email,
-                Phone = E.Phone,
-                Gender= E.Gender,
-                EmployeeType = E.EmployeeType,
-                HiringDate = E.HiringDate
-
+                PhoneNumber = E.Phone,
+                Gender= E.Gender.ToString(),
+                EmployeeType = E.EmployeeType.ToString(),
+                HiringDate = DateOnly.FromDateTime(E.HiringDate),
+                CreatedBy = 1,
+                CreatedOn = (DateTime)E?.CreatedOn,
+                LastModifiedBy = 1,
+                LastModifiedOn = (DateTime)E.LastModifiedOn
             };
         }
 
-        public static Employee ToEntity(this CreateEmployeeDto employeeDto)
-        {
-            return new Employee()
-            {
-                Name = employeeDto.Name,
-                Age = employeeDto.Age,
-                Address =  employeeDto.Address,
-                Salary = employeeDto.Salary,
-                IsActive = employeeDto.IsActive,
-                Email = employeeDto.Email,
-                Phone = employeeDto.Phone,
-                Gender = employeeDto.Gender,
-                EmployeeType = employeeDto.EmployeeType,
-                HiringDate = employeeDto.HiringDate
-            };
-        }
+        //public static Employee ToEntity(this CreateEmployeeDto employeeDto)
+        //{
+        //    return new Employee()
+        //    {
+        //        Name = employeeDto.Name,
+        //        Age = employeeDto.Age,
+        //        Address =  employeeDto.Address,
+        //        Salary = employeeDto.Salary,
+        //        IsActive = employeeDto.IsActive,
+        //        Email = employeeDto.Email,
+        //        Phone = employeeDto.Phone,
+        //        Gender = employeeDto.Gender,
+        //        EmployeeType = employeeDto.EmployeeType,
+        //        HiringDate = employeeDto.HiringDate
+        //    };
+        //}
 
-        public static Employee ToEntity(this UpdateEmployeeDto updateEmployeeDto) => new Employee()
-        {
-            Name = updateEmployeeDto.Name,
-            Age = updateEmployeeDto.Age,
-            Address = updateEmployeeDto.Address,
-            Salary = updateEmployeeDto.Salary,
-            IsActive = updateEmployeeDto.IsActive,
-            Email = updateEmployeeDto.Email,
-            Phone = updateEmployeeDto.Phone,
-            Gender= updateEmployeeDto.Gender,
-            EmployeeType = updateEmployeeDto.EmployeeType,
-            HiringDate = updateEmployeeDto.HiringDate
-        };
+        //public static Employee ToEntity(this UpdateEmployeeDto updateEmployeeDto) => new Employee()
+        //{
+        //    Name = updateEmployeeDto.Name,
+        //    Age = updateEmployeeDto.Age,
+        //    Address = updateEmployeeDto.Address,
+        //    Salary = updateEmployeeDto.Salary,
+        //    IsActive = updateEmployeeDto.IsActive,
+        //    Email = updateEmployeeDto.Email,
+        //    Phone = updateEmployeeDto.Phone,
+        //    Gender= updateEmployeeDto.Gender,
+        //    EmployeeType = updateEmployeeDto.EmployeeType,
+        //    HiringDate = updateEmployeeDto.HiringDate
+        //};
     }
 }
