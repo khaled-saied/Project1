@@ -71,7 +71,6 @@ namespace Demo.presentation.Controllers
         }
         #endregion
 
-
         #region Edit
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -129,6 +128,42 @@ namespace Demo.presentation.Controllers
                 }
             }
             return View(employeeDto);
+        }
+        #endregion
+
+        #region Delete
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            if (id == 0) return BadRequest();
+            try
+            {
+                var result = _employeeServices.RemoveEmployee(id);
+                if (result)
+                    return RedirectToAction(nameof(Index));
+                else
+                {
+                    ModelState.AddModelError("", "Failed to delete employee");
+                    return RedirectToAction(nameof(Index) , new {id = id});
+                }
+            }
+            catch (Exception ex)
+            {
+                //ModelState.AddModelError("", ex.Message);
+                if (_webHostEnvironment.IsDevelopment())
+                {
+                    //1- Devolpment=> log error in console and return error message to user
+                    //ModelState.AddModelError("", ex.Message);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    //2-Deployment=> log error in file or database and return  error view,
+                    _logger.LogError(ex.Message);
+                    return View("ErrorView", ex);
+                }
+            }
         }
         #endregion
 
