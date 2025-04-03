@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Demo.DAL.Models.DepartmentModels;
 
+
 namespace Demo.DAL.Repositories.Interfaces
 {
     public interface IGenericRepository <TEntity> where TEntity : BaseEntity
