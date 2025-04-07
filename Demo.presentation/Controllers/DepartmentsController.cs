@@ -35,13 +35,15 @@ namespace Demo.presentation.Controllers
                     };
 
                     int result = _departmentServices.AddDepartment(departmentDto);
+
+                    string Message;
                     if (result > 0)
-                        return RedirectToAction(nameof(Index));
+                        Message = $"Department {departmentViewModel.Name} Is Created Sucessfully";
                     else
-                    {
-                        ModelState.AddModelError(string.Empty, "Department was not created");
-                        //return View(departmentDto);
-                    }
+                        Message = $"Department {departmentViewModel.Name} Is Not Created Sucessfully";
+
+                    TempData["Message"] = Message;
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
