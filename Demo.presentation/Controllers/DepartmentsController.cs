@@ -20,12 +20,20 @@ namespace Demo.presentation.Controllers
         public IActionResult Create() => View();
 
         [HttpPost]
-        public IActionResult Create(CreatedDepartmentDto departmentDto)
+        public IActionResult Create(DepartmentViewModel departmentViewModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var departmentDto = new CreatedDepartmentDto()
+                    {
+                        Code = departmentViewModel.Code,
+                        Name = departmentViewModel.Name,
+                        Description = departmentViewModel.Descreption,
+                        DateOfCreation = departmentViewModel.DateOfCreation,
+                    };
+
                     int result = _departmentServices.AddDepartment(departmentDto);
                     if (result > 0)
                         return RedirectToAction(nameof(Index));
@@ -52,7 +60,7 @@ namespace Demo.presentation.Controllers
                     }
                 }
             }
-            return View(departmentDto);
+            return View(departmentViewModel);
         }
 
         #endregion
@@ -75,7 +83,7 @@ namespace Demo.presentation.Controllers
             if (!id.HasValue) return BadRequest();
             var department = _departmentServices.GetDepartmentById(id.Value);
             if (department == null) return NotFound();
-            var DepartmentViewModel = new DepartmentEditViewModel
+            var DepartmentViewModel = new DepartmentViewModel
             {
                 Code = department.Code,
                 Name = department.Name,
@@ -86,7 +94,7 @@ namespace Demo.presentation.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit([FromRoute]int id,DepartmentEditViewModel viewModel)
+        public IActionResult Edit([FromRoute]int id,DepartmentViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
