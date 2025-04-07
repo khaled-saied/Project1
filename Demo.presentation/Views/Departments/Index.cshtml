@@ -5,63 +5,75 @@
 	ViewData["Title"] = "Index";
 }
 
+@* toast Of Create *@
+@if (!string.IsNullOrWhiteSpace(TempData["Message"] as string))
+{
+	<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed p-3" style="bottom: 25px; right:25px; z-index: 100;">
+		<div class="toast fade show " role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="toast-header">
+				<strong class="me-auto text-success">Success!!</strong>
+				<small>Just now</small>
+				<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+			<div class="toast-body">
+				@TempData["Message"]
+			</div>
+		</div>
+	</div>
+
+}
+
+
 <h1 class="text-bg-primary text-center my-2">All Department</h1>
 <br />
 
 <a asp-controller="Departments" asp-action="Create" class="btn btn-primary font-weight-bold my-4">Create Department</a>
 
-@if(Model?.Any() ?? false)
+@if (Model?.Any() ?? false)
 {
 	<table class="table table-hover">
 		<thead class="text-center">
 			<tr>
-				<th>@Html.DisplayNameFor(D=> D.Code)</th>
-				<th>@Html.DisplayNameFor(D=> D.Name)</th>
-				<th>@Html.DisplayNameFor(D=> D.Description)</th>
-				<th>@Html.DisplayNameFor(D=> D.DateOfCreation)</th>
+				<th>@Html.DisplayNameFor(D => D.Code)</th>
+				<th>@Html.DisplayNameFor(D => D.Name)</th>
+				<th>@Html.DisplayNameFor(D => D.Description)</th>
+				<th>@Html.DisplayNameFor(D => D.DateOfCreation)</th>
 				<th>Details</th>
 				<th>Update</th>
 				<th>Delete</th>
 			</tr>
 		</thead>
 		<tbody class="text-center">
-		@foreach(var item in Model)
-		{
-			<tr>
-				<td>@item.Code</td>
-				<td>@item.Name</td>
-				<td>@item.Description</td>
-				<td>@item.DateOfCreation</td>
-				<td>
-					<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">
-						<i class="fas fa-eye"></i>
-						Details
-					</a>
-				</td>
-				<td>
-					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-success">
-						<i class="fas fa-edit"></i>
-						Edit
-					</a>
-				</td>
-				<td>
-					<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
-						<i class="fas fa-trash"></i>
-						Delete
-					</a>
-				</td>
-			</tr>
-		}
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@item.Code</td>
+					<td>@item.Name</td>
+					<td>@item.Description</td>
+					<td>@item.DateOfCreation</td>
+
+					@* _ButtonsPartialView *@
+					<partial name="_ButtonsPartialView" model="@item.Id" />
+
+
+					<td>
+						<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
+							<i class="fas fa-trash"></i>
+							Delete
+						</a>
+					</td>
+				</tr>
+			}
 		</tbody>
 	</table>
 }
 else
 {
 	<div class="alert alert-info">
-		No Department Found @for(int i = 0; i < 3; i++)
+		No Department Found @for (int i = 0; i < 3; i++)
 		{
 			<i class="fa-solid fa-exclamation"></i>
-		} 
+		}
 	</div>
 }
 

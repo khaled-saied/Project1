@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Demo.DAL.Models.DepartmentModels;
@@ -30,24 +31,36 @@ namespace Demo.DAL.Repositories.Classes
         }
 
         //Update
-        public int Update(TEntity entity)
+        public void Update(TEntity entity)
         {
             _dbContext.Set<TEntity>().Update(entity);
-            return _dbContext.SaveChanges();
         }
 
         //Delete
-        public int Remove(TEntity entity)
+        public void Remove(TEntity entity)
         {
             _dbContext.Set<TEntity>().Remove(entity);
-            return _dbContext.SaveChanges();
         }
 
         //Insert
-        public int Insert(TEntity entity)
+        public void Insert(TEntity entity)
         {
             _dbContext.Set<TEntity>().Add(entity);
-            return _dbContext.SaveChanges();
+        }
+
+        public IEnumerable<TResult> GetAll<TResult>(Expression<Func<TEntity, TResult>> Selector)
+        {
+            return _dbContext.Set<TEntity>()
+                .Where(E => E.IsDeleted != true)
+                .Select(Selector)
+                .ToList();
+        }
+
+        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> Predicate)
+        {
+            return _dbContext.Set<TEntity>()
+                .Where(Predicate)
+                .ToList();
         }
     }
 }
