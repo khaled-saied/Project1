@@ -4,6 +4,7 @@ using Demo.BLL.Services.ServicesOfEmployee;
 using Demo.DAL.Data.Contexts;
 using Demo.DAL.Repositories.Classes;
 using Demo.DAL.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.presentation
@@ -16,7 +17,10 @@ namespace Demo.presentation
 
             
             #region Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
 
             //builder.Services.AddScoped<ApplicationDbContext>();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
