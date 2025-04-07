@@ -32,15 +32,17 @@ namespace Demo.presentation
             });
 
             //Department
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
             //Employee
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
 
             //AutoMapper
             //builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             builder.Services.AddAutoMapper(M=> M.AddProfile(new MappingProfiles()));
+            //UnitOfWork
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
             #endregion

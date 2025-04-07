@@ -7,18 +7,17 @@ using Demo.DAL.Repositories.Interfaces;
 
 namespace Demo.BLL.Services.ServicesOfEmployee
 {
-    public class EmployeeServices(IEmployeeRepository employeeRepository,IMapper _mapper) : IEmployeeServices
+    public class EmployeeServices(IUnitOfWork _unitOfWork,IMapper _mapper) : IEmployeeServices
     {
-        private readonly IEmployeeRepository _employeeRepository = employeeRepository;
 
         //Get All Employees
         public IEnumerable<EmployeeDto> GetAllEmployees(string? EmployeeSearchName)
         {
             IEnumerable<Employee> employees;
             if (string.IsNullOrWhiteSpace(EmployeeSearchName))
-                employees = _employeeRepository.GetAll();
+                employees = _unitOfWork.EmployeeRepository.GetAll();
             else
-                employees = _employeeRepository.GetAll().Where(e => e.Name.ToLower().Contains(EmployeeSearchName.ToLower()));
+                employees = _unitOfWork.EmployeeRepository.GetAll().Where(e => e.Name.ToLower().Contains(EmployeeSearchName.ToLower()));
 
             var employeeDto = _mapper.Map<IEnumerable<Employee>,IEnumerable<EmployeeDto>>(employees);
             //return employees.Select(D => D.ToEmployeeDto());
@@ -31,7 +30,7 @@ namespace Demo.BLL.Services.ServicesOfEmployee
         //Get Employee By Id
         public EmployeeDetailsDto? GetEmployeeById(int id)
         {
-            var employee = _employeeRepository.GetById(id);
+            var employee = _unitOfWork.EmployeeRepository.GetById(id);
             //return employee?.ToEmployeeDetailsDto();
             return employee is null ? null : _mapper.Map<Employee,EmployeeDetailsDto>(employee);
         }
@@ -42,25 +41,28 @@ namespace Demo.BLL.Services.ServicesOfEmployee
             //var employee = employeeDto.ToEntity();
             //return _employeeRepository.Insert(employee);
 
-            return _employeeRepository.Insert(_mapper.Map<CreateEmployeeDto, Employee>(employeeDto));
+           _unitOfWork.EmployeeRepository.Insert(_mapper.Map<CreateEmployeeDto, Employee>(employeeDto)); //Add loaclly
+            return _unitOfWork.SaveChanges(); //Save to database
         }
 
         //Update Employee
         public int UpdateEmployee(UpdateEmployeeDto employeeDto)
         {
             //return _employeeRepository.Update(employeeDto.ToEntity());
-            return _employeeRepository.Update(_mapper.Map<UpdateEmployeeDto, Employee>(employeeDto));
+             _unitOfWork.EmployeeRepository.Update(_mapper.Map<UpdateEmployeeDto, Employee>(employeeDto));
+            return _unitOfWork.SaveChanges(); //Save to database
         }
 
         //Delete Employee
         public bool RemoveEmployee(int id)
         {
-            var employee = _employeeRepository.GetById(id);
+            var employee = _unitOfWork.EmployeeRepository.GetById(id);
             if (employee == null) return false;
             else
             {
                 employee.IsDeleted = true;
-                return _employeeRepository.Update(employee) > 0 ? true : false;
+                _unitOfWork.EmployeeRepository.Update(employee);
+                return _unitOfWork.SaveChanges() > 0 ? true : false;
             }
         }
     }
