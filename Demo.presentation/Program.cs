@@ -28,6 +28,7 @@ namespace Demo.presentation
                 //options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]);
                 //options.UseSqlServer(builder.Configuration.GetSection("ConnectionStrings")["DefaultConnection"]);
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseLazyLoadingProxies();
             });
 
             //Department

@@ -12,14 +12,20 @@ namespace Demo.BLL.Services.ServicesOfEmployee
         private readonly IEmployeeRepository _employeeRepository = employeeRepository;
 
         //Get All Employees
-        public IEnumerable<EmployeeDto> GetAllEmployees(bool WithTracking = false)
+        public IEnumerable<EmployeeDto> GetAllEmployees(string? EmployeeSearchName)
         {
-            var employees = _employeeRepository.GetAll(WithTracking);
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrWhiteSpace(EmployeeSearchName))
+                employees = _employeeRepository.GetAll();
+            else
+                employees = _employeeRepository.GetAll().Where(e => e.Name.ToLower().Contains(EmployeeSearchName.ToLower()));
+
+            var employeeDto = _mapper.Map<IEnumerable<Employee>,IEnumerable<EmployeeDto>>(employees);
             //return employees.Select(D => D.ToEmployeeDto());
 
             // SRC =>Employee
             // Destination => EmployeeDto
-            return _mapper.Map<IEnumerable<EmployeeDto>>(employees);
+            return employeeDto;
         }
 
         //Get Employee By Id
@@ -57,6 +63,5 @@ namespace Demo.BLL.Services.ServicesOfEmployee
                 return _employeeRepository.Update(employee) > 0 ? true : false;
             }
         }
-
     }
 }

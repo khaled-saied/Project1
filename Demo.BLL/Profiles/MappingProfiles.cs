@@ -14,22 +14,25 @@ namespace Demo.BLL.Profiles
         public MappingProfiles()
         {
             CreateMap<Employee, EmployeeDto>()
-                .ForMember(dest => dest.EmployeeType, opt => opt.MapFrom(src => src.EmployeeType))
-                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender));
+                .ForMember(dest => dest.EmployeeType, src => src.MapFrom(src => src.EmployeeType))
+                .ForMember(dest => dest.Gender, src => src.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.Department, src => src.MapFrom(src => src.Department != null ? src.Department.Name : null));
 
             CreateMap<Employee, EmployeeDetailsDto>()
-                .ForMember(dest => dest.EmployeeType, opt => opt.MapFrom(src => src.EmployeeType))
-                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender))
-                .ForMember(dest => dest.HiringDate, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.HiringDate)))
-                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Phone));
+                .ForMember(dest => dest.EmployeeType, src => src.MapFrom(src => src.EmployeeType))
+                .ForMember(dest => dest.Gender, src => src.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.HiringDate, src => src.MapFrom(src => DateOnly.FromDateTime(src.HiringDate)))
+                .ForMember(dest => dest.PhoneNumber, src => src.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.Department, src => src.MapFrom(src => src.Department != null ? src.Department.Name : null));
+
 
             CreateMap<CreateEmployeeDto, Employee>()
-                 .ForMember(dest => dest.HiringDate, opt => opt.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)))
-                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.PhoneNumber));
+                 .ForMember(dest => dest.HiringDate, src => src.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)))
+                .ForMember(dest => dest.Phone, src => src.MapFrom(src => src.PhoneNumber));
 
             CreateMap<UpdateEmployeeDto, Employee>()
-                .ForMember(dest => dest.HiringDate, opt => opt.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)))
-                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.PhoneNumber));
+                .ForMember(dest => dest.HiringDate, src => src.MapFrom(src => src.HiringDate.ToDateTime(TimeOnly.MinValue)))
+                .ForMember(dest => dest.Phone, src => src.MapFrom(src => src.PhoneNumber));
         }
     }
 }

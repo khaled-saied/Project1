@@ -23,6 +23,6 @@ namespace Demo.DAL.Models.EmployeeModels
         public DateTime HiringDate { get; set; }
 
         public int? DepartmentId { get; set; } //FK
-        public Department? Department { get; set; }
+        public virtual Department? Department { get; set; }
     }
 }
