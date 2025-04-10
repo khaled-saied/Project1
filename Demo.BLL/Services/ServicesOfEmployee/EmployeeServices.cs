@@ -40,10 +40,14 @@ namespace Demo.BLL.Services.ServicesOfEmployee
         //Create New Department
         public int AddEmployee(CreateEmployeeDto employeeDto)
         {
-            //var employee = employeeDto.ToEntity();
-            //return _employeeRepository.Insert(employee);
 
-           _unitOfWork.EmployeeRepository.Insert(_mapper.Map<CreateEmployeeDto, Employee>(employeeDto)); //Add loaclly
+            var employee = _mapper.Map<CreateEmployeeDto, Employee>(employeeDto);
+            if(employeeDto.Image is not null)
+            {
+               employee.ImageName= _attachmentServices.UploadFile(employeeDto.Image, "Images");
+            }
+
+            _unitOfWork.EmployeeRepository.Insert(employee); //Add loaclly
             return _unitOfWork.SaveChanges(); //Save to database
         }
 
