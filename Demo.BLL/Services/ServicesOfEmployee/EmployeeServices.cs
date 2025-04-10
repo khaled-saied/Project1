@@ -2,12 +2,14 @@
 using AutoMapper;
 using Demo.BLL.DataTransferObjects.EmployeeDto;
 using Demo.BLL.Factories;
+using Demo.BLL.Services.AttachmentServices;
 using Demo.DAL.Models.EmployeeModels;
 using Demo.DAL.Repositories.Interfaces;
 
 namespace Demo.BLL.Services.ServicesOfEmployee
 {
-    public class EmployeeServices(IUnitOfWork _unitOfWork,IMapper _mapper) : IEmployeeServices
+    public class EmployeeServices(IUnitOfWork _unitOfWork,IMapper _mapper,
+                                  IAttachmentServices _attachmentServices) : IEmployeeServices
     {
 
         //Get All Employees
@@ -65,5 +67,7 @@ namespace Demo.BLL.Services.ServicesOfEmployee
                 return _unitOfWork.SaveChanges() > 0 ? true : false;
             }
         }
+
+       
     }
 }

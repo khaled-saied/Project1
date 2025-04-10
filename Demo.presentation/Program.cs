@@ -1,4 +1,5 @@
 using Demo.BLL.Profiles;
+using Demo.BLL.Services.AttachmentServices;
 using Demo.BLL.Services.DepartmentsServices;
 using Demo.BLL.Services.ServicesOfEmployee;
 using Demo.DAL.Data.Contexts;
@@ -43,6 +44,8 @@ namespace Demo.presentation
             builder.Services.AddAutoMapper(M=> M.AddProfile(new MappingProfiles()));
             //UnitOfWork
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //Attachment Services
+            builder.Services.AddScoped<IAttachmentServices, AttachmentServices>();
 
 
             #endregion
