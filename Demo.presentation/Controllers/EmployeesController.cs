@@ -44,8 +44,8 @@ namespace Demo.presentation.Controllers
                         Gender = employeeViewModel.Gender,
                         EmployeeType = employeeViewModel.EmployeeType,
                         HiringDate = employeeViewModel.HiringDate,
-                        DepartmentId = employeeViewModel.DepartmentId
-
+                        DepartmentId = employeeViewModel.DepartmentId,
+                        Image = employeeViewModel.Image
                     };
 
                     int Result = _employeeServices.AddEmployee(employeeDto);
