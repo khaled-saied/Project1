@@ -1,9 +1,11 @@
 ﻿
 using Demo.DAL.Models.DepartmentModels;
+using Demo.DAL.Models.IdentityModel;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Demo.DAL.Data.Contexts
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
     {
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -11,6 +13,7 @@ namespace Demo.DAL.Data.Contexts
             //modelBuilder.ApplyConfiguration(new DepartmentConfigrations());
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             //modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            base.OnModelCreating(modelBuilder);
 
         }
 

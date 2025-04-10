@@ -3,8 +3,10 @@ using Demo.BLL.Services.AttachmentServices;
 using Demo.BLL.Services.DepartmentsServices;
 using Demo.BLL.Services.ServicesOfEmployee;
 using Demo.DAL.Data.Contexts;
+using Demo.DAL.Models.IdentityModel;
 using Demo.DAL.Repositories.Classes;
 using Demo.DAL.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -47,6 +49,9 @@ namespace Demo.presentation
             //Attachment Services
             builder.Services.AddScoped<IAttachmentServices, AttachmentServices>();
 
+            //Identity
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                             .AddEntityFrameworkStores<ApplicationDbContext>();
 
             #endregion
 
@@ -70,7 +75,7 @@ namespace Demo.presentation
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Register}/{id?}");
 
             #endregion
 
