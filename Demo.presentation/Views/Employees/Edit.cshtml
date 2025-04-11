@@ -6,9 +6,22 @@
 }
 
 <div class="row justify-content-center align-content-center mt-3">
-    <h1 class="col-8 my-4">Edit Employee</h1>
-    <form method="post" asp-controller="Employees" asp-action="Edit" class="row col-8">
+    <h1 class="col-8 my-4">Edit Employee {@Model.Name}</h1>
+    <form method="post" asp-controller="Employees" asp-action="Edit" class="row col-8" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly"></div>
+
+        @if (ViewData["Image"] as string is not null)
+        {
+
+            <div class="mb-3">
+                @* <img src="~/Files/Images/@ViewData["Image"]" *@
+                <img src="~/Files/Images/@ViewData["Image"]"
+                     alt="Employee Image"
+                     class="rounded-circle"
+                     style="width: 100px; height: 100px; object-fit: cover;" />
+            </div>
+        }
+
 
         <partial name="PartialViews/CreateEditEmployeePartilaView" />
 

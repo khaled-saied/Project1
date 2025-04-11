@@ -24,7 +24,7 @@ namespace Demo.BLL.Profiles
                 .ForMember(dest => dest.HiringDate, src => src.MapFrom(src => DateOnly.FromDateTime(src.HiringDate)))
                 .ForMember(dest => dest.PhoneNumber, src => src.MapFrom(src => src.Phone))
                 .ForMember(dest => dest.Department, src => src.MapFrom(src => src.Department != null ? src.Department.Name : null))
-                .ForMember(dest => dest.Image, src => src.MapFrom(src => src.ImageName ));
+                .ForMember(dest => dest.ImageName, src => src.MapFrom(src => src.ImageName ));
 
 
             CreateMap<CreateEmployeeDto, Employee>()

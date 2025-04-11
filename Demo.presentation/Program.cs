@@ -16,6 +16,8 @@ namespace Demo.presentation
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine("He;;");
+
             var builder = WebApplication.CreateBuilder(args);
 
             
@@ -75,7 +77,8 @@ namespace Demo.presentation
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Account}/{action=Register}/{id?}");
+                //pattern: "{controller=Account}/{action=Register}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             #endregion
 
