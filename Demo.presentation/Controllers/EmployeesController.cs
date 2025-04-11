@@ -111,11 +111,8 @@ namespace Demo.presentation.Controllers
                 HiringDate = employee.HiringDate,
                 Gender = Enum.Parse<Gender>(employee.Gender),
                 EmployeeType = Enum.Parse<EmployeeType>(employee.EmployeeType),
-                DepartmentId = employee.DepartmentId,
-                //Image = employee.ImageName
+                DepartmentId = employee.DepartmentId
             };
-            //if (employee.ImageName is not null)
-            //    _attachmentServices.DeleteFile(employee.ImageName);
             return View(employeeViewModel);
         }
 

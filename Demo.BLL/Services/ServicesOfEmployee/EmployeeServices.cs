@@ -48,29 +48,7 @@ namespace Demo.BLL.Services.ServicesOfEmployee
             _unitOfWork.EmployeeRepository.Insert(employee); //Add loaclly
             return _unitOfWork.SaveChanges(); //Save to database
         }
-
         //Update Employee
-        //public int UpdateEmployee(UpdateEmployeeDto employeeDto)
-        //{
-
-
-        //    var employee = _mapper.Map<UpdateEmployeeDto, Employee>(employeeDto);
-        //    bool flag;
-        //    if (employee.ImageName is not null)
-        //    {
-        //        flag = _attachmentServices.DeleteFile(employee.ImageName);
-        //        if (flag)
-        //        {
-        //        employee.ImageName = _attachmentServices.UploadFile(employeeDto.Image, "Images");
-        //        }
-        //    }
-
-        //    _unitOfWork.EmployeeRepository.Update(employee);
-        //    return _unitOfWork.SaveChanges(); //Save to database
-        //}
-
-        //Delete Employee
-
         public int UpdateEmployee(UpdateEmployeeDto employeeDto)
         {
             var existingEmployee = _unitOfWork.EmployeeRepository.GetById(employeeDto.Id);
