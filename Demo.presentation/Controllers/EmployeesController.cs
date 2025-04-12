@@ -1,4 +1,5 @@
 ﻿using Demo.BLL.DataTransferObjects.EmployeeDto;
+using Demo.BLL.Services.AttachmentServices;
 using Demo.BLL.Services.DepartmentsServices;
 using Demo.BLL.Services.ServicesOfEmployee;
 using Demo.DAL.Models.EmployeeModels;
@@ -10,7 +11,8 @@ namespace Demo.presentation.Controllers
 {
     public class EmployeesController(IEmployeeServices _employeeServices,
                                      IWebHostEnvironment _webHostEnvironment,
-                                     ILogger<EmployeesController> _logger ) : Controller
+                                     ILogger<EmployeesController> _logger,
+                                     IAttachmentServices _attachmentServices) : Controller
     {
         public IActionResult Index(string? EmployeeSearchName)
         {
@@ -96,6 +98,7 @@ namespace Demo.presentation.Controllers
             if (!id.HasValue) return BadRequest();
             var employee = _employeeServices.GetEmployeeById(id.Value);
             if (employee == null) return NotFound();
+            ViewData["Image"] = employee.ImageName;
             var employeeViewModel = new EmployeeViewModel()
             {
                 Name = employee.Name,
@@ -121,6 +124,10 @@ namespace Demo.presentation.Controllers
             if (!ModelState.IsValid) return View(employeeViewModel);
             try
             {
+                var oldEmployee = _employeeServices.GetEmployeeById(id.Value);
+                if (oldEmployee is null)
+                    return NotFound();
+
                 var employeeDto = new UpdateEmployeeDto()
                 {
                     Id = id.Value,
@@ -134,9 +141,10 @@ namespace Demo.presentation.Controllers
                     HiringDate = employeeViewModel.HiringDate,
                     Gender = employeeViewModel.Gender,
                     EmployeeType = employeeViewModel.EmployeeType,
-                    DepartmentId = employeeViewModel.DepartmentId
-
+                    DepartmentId = employeeViewModel.DepartmentId,
+                    Image = employeeViewModel.Image
                 };
+                
 
                 int result = _employeeServices.UpdateEmployee(employeeDto);
                 if (result > 0)

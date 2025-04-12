@@ -22,10 +22,7 @@ namespace Demo.BLL.Services.ServicesOfEmployee
                 employees = _unitOfWork.EmployeeRepository.GetAll().Where(e => e.Name.ToLower().Contains(EmployeeSearchName.ToLower()));
 
             var employeeDto = _mapper.Map<IEnumerable<Employee>,IEnumerable<EmployeeDto>>(employees);
-            //return employees.Select(D => D.ToEmployeeDto());
-
-            // SRC =>Employee
-            // Destination => EmployeeDto
+            
             return employeeDto;
         }
 
@@ -33,8 +30,9 @@ namespace Demo.BLL.Services.ServicesOfEmployee
         public EmployeeDetailsDto? GetEmployeeById(int id)
         {
             var employee = _unitOfWork.EmployeeRepository.GetById(id);
-            //return employee?.ToEmployeeDetailsDto();
-            return employee is null ? null : _mapper.Map<Employee,EmployeeDetailsDto>(employee);
+            var employeeDto = _mapper.Map<Employee, EmployeeDetailsDto>(employee);
+            
+            return employee is null ? null : employeeDto;
         }
 
         //Create New Department
@@ -50,16 +48,28 @@ namespace Demo.BLL.Services.ServicesOfEmployee
             _unitOfWork.EmployeeRepository.Insert(employee); //Add loaclly
             return _unitOfWork.SaveChanges(); //Save to database
         }
-
         //Update Employee
         public int UpdateEmployee(UpdateEmployeeDto employeeDto)
         {
-            //return _employeeRepository.Update(employeeDto.ToEntity());
-             _unitOfWork.EmployeeRepository.Update(_mapper.Map<UpdateEmployeeDto, Employee>(employeeDto));
-            return _unitOfWork.SaveChanges(); //Save to database
+            var existingEmployee = _unitOfWork.EmployeeRepository.GetById(employeeDto.Id);
+            if (existingEmployee == null) return 0;
+
+            _mapper.Map(employeeDto, existingEmployee);
+
+            if (employeeDto.Image is not null)
+            {
+                if (!string.IsNullOrEmpty(existingEmployee.ImageName))
+                {
+                    _attachmentServices.DeleteFile(Path.Combine("wwwroot", "Files", "Images", existingEmployee.ImageName));
+                }
+
+                existingEmployee.ImageName = _attachmentServices.UploadFile(employeeDto.Image, "Images");
+            }
+
+            _unitOfWork.EmployeeRepository.Update(existingEmployee);
+            return _unitOfWork.SaveChanges();
         }
 
-        //Delete Employee
         public bool RemoveEmployee(int id)
         {
             var employee = _unitOfWork.EmployeeRepository.GetById(id);
