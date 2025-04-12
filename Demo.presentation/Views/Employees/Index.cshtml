@@ -50,48 +50,40 @@
 			</tr>
 		</thead>
 		<tbody class="text-center">
-			@foreach (var employee in Model)
-			{
-				<tr>
-					<td>
-						@if (string.IsNullOrEmpty(employee.ImageName))
-						{
-							<text>No Image</text>
-						}
-						else
-						{
-							<div class="mb-3">
-								<img src="~/Files/Images/@employee.ImageName"
-									 alt="Employee Image"
-									 class="rounded-circle"
-									 style="width: 70px; height:70px; object-fit: cover;" />
-							</div>
-						}
-					</td>
-
-
-					<td>@Html.DisplayFor(E => employee.Salary)</td>
-					<td>@employee.Name</td>
-					<td>@employee.Email</td>
-					<td>@employee.EmployeeType</td>
-					<td>@employee.Age</td>
-					<td>@(string.IsNullOrEmpty(@employee.Department) ? "No Department" : employee.Department) </td>
-
-					<td>@Html.DisplayFor(E => employee.Salary)</td>
-					<td>
-						<i class="fa @(employee.IsActive ? "fa-solid fa-circle-check text-success": "fa-solid fa-circle-xmark text-danger") "></i>
-					</td>
-					<td>@employee.Gender</td>
-
-
-					@* _ButtonsPartialView *@
-					<partial name="_ButtonsPartialView" model="@employee.Id" />
-
-					
-					<td>
-						<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@employee.Id">
-							<i class="fas fa-trash"></i> Delete
-						</button>
+            @foreach (var employee in Model)
+            {
+                <tr>
+                    <td>
+                        @if (string.IsNullOrEmpty(employee.ImageName))
+                        {
+                            <text>No Image</text>
+                        }
+                        else
+                        {
+                            <div class="mb-3">
+                                <img src="~/Files/Images/@employee.ImageName"
+                                     alt="Employee Image"
+                                     class="rounded-circle"
+                                     style="width: 70px; height:70px; object-fit: cover;" />
+                            </div>
+                        }
+                    </td>
+                    <td>@employee.Name</td> 
+                    <td>@employee.Email</td>
+                    <td>@employee.EmployeeType</td>
+                    <td>@employee.Age</td>
+                    <td>@(string.IsNullOrEmpty(employee.Department) ? "No Department" : employee.Department)</td>
+                    <td>@Html.DisplayFor(e => employee.Salary)</td> 
+                    <td>
+                        <i class="fa @(employee.IsActive ? "fa-solid fa-circle-check text-success" : "fa-solid fa-circle-xmark text-danger")"></i>
+                    </td>
+                    <td>@employee.Gender</td>
+                    <partial name="_ButtonsPartialView" model="@employee.Id" />
+                    <!-- Delete Button -->
+                    <td>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@employee.Id">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
 						<!-- Delete Modal -->
 						<div class="modal fade" id="deleteModal-@employee.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 							<div class="modal-dialog">
@@ -112,11 +104,10 @@
 								</div>
 							</div>
 						</div>
-					</td>
 
-				</tr>
-			}
-		</tbody>
+                    </td>
+                </tr>
+            }
 	</table>
 }
 else
