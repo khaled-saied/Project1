@@ -51,7 +51,8 @@ namespace Demo.presentation
 
             //Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                             .AddEntityFrameworkStores<ApplicationDbContext>();
+                             .AddEntityFrameworkStores<ApplicationDbContext>()
+                             .AddDefaultTokenProviders();
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
