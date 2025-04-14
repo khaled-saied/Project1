@@ -53,6 +53,11 @@ namespace Demo.presentation
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                              .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+            });
+
             #endregion
 
             var app = builder.Build();
@@ -71,12 +76,13 @@ namespace Demo.presentation
 
             app.UseRouting();
 
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                //pattern: "{controller=Account}/{action=Register}/{id?}");
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Register}/{id?}");
+        //pattern: "{controller=Home}/{action=Index}/{id?}");
 
             #endregion
 

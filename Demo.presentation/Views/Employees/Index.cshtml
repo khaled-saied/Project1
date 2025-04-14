@@ -45,7 +45,7 @@
 				<th>@Html.DisplayNameFor(e => e.IsActive)</th>
 				<th>@Html.DisplayNameFor(e => e.Gender)</th>
 				<th>Details </th>
-				<th>Update</th>
+				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
 		</thead>
@@ -70,14 +70,13 @@
 					</td>
 
 
-					<td>@Html.DisplayFor(E => employee.Salary)</td>
 					<td>@employee.Name</td>
 					<td>@employee.Email</td>
 					<td>@employee.EmployeeType</td>
 					<td>@employee.Age</td>
 					<td>@(string.IsNullOrEmpty(@employee.Department) ? "No Department" : employee.Department) </td>
-
 					<td>@Html.DisplayFor(E => employee.Salary)</td>
+
 					<td>
 						<i class="fa @(employee.IsActive ? "fa-solid fa-circle-check text-success": "fa-solid fa-circle-xmark text-danger") "></i>
 					</td>
