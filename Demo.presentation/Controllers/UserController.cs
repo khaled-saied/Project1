@@ -3,6 +3,7 @@ using Demo.presentation.ViewModels.User;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Demo.presentation.Controllers
 {
@@ -28,7 +29,7 @@ namespace Demo.presentation.Controllers
         [HttpGet]
         public IActionResult Details(string id)
         {
-            var user = _userManger.Users.FirstOrDefault(x => x.Id == id);
+            var user = _userManger.Users.FirstOrDefaultAsync(x => x.Id == id).Result;
             if (user is not null)
             {
                 var UserDetailsDto = new UserDetailsDto()
@@ -49,7 +50,7 @@ namespace Demo.presentation.Controllers
         [HttpGet]
         public IActionResult Edit(string id)
         {
-            var User = _userManger.Users.FirstOrDefault(x => x.Id == id);
+            var User = _userManger.Users.FirstOrDefaultAsync(x => x.Id == id).Result;
             if (User is not null)
             {
                 var UserDetailsDto = new UpdatedUserDto()
@@ -69,7 +70,7 @@ namespace Demo.presentation.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _userManger.Users.FirstOrDefault(x => x.Id == updatedUserDto.Id);
+                var user = _userManger.Users.FirstOrDefaultAsync(x => x.Id == updatedUserDto.Id).Result;
                 if (user is not null)
                 {
                     user.FirstName = updatedUserDto.FName;
@@ -90,7 +91,7 @@ namespace Demo.presentation.Controllers
         [HttpGet]
         public IActionResult Delete(string id)
         {
-            var user = _userManger.Users.FirstOrDefault(x => x.Id == id);
+            var user = _userManger.Users.FirstOrDefaultAsync(x => x.Id == id).Result;
             if (user is not null)
             {
                 var UserDetailsDto = new UserDetailsDto()
@@ -112,15 +113,15 @@ namespace Demo.presentation.Controllers
             if (string.IsNullOrWhiteSpace(id)) return BadRequest();
             try
             {
-                var user = _userManger.Users.FirstOrDefault(x => x.Id == id);
+                var user = _userManger.Users.FirstOrDefaultAsync(x => x.Id == id).Result;
                 if (user is not null)
                 {
                     var result = _userManger.DeleteAsync(user).Result;
-                    
+
                     if (result.Succeeded)
                     {
                         TempData["SuccessMessage"] = "User deleted successfully!";
-                        return RedirectToAction("Index"); 
+                        return RedirectToAction("Index");
                     }
                 }
                 else
@@ -130,7 +131,7 @@ namespace Demo.presentation.Controllers
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //ModelState.AddModelError("", ex.Message);
                 if (_webHostEnvironment.IsDevelopment())
