@@ -1,19 +1,20 @@
-﻿
-
-@model EmployeeViewModel
+﻿@model EmployeeViewModel
 @{
     ViewData["Title"] = "Edit";
 }
 
-<div class="row justify-content-center align-content-center mt-3">
-    <h1 class="col-8 my-4">Edit Employee {@Model.Name}</h1>
-    <form method="post" asp-controller="Employees" asp-action="Edit" class="row col-8" enctype="multipart/form-data">
-        <div asp-validation-summary="ModelOnly"></div>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Edit Employee - @Model.Name</h1>
 
+    <form method="post" asp-controller="Employees" asp-action="Edit" class="row col-8 mx-auto" enctype="multipart/form-data">
+
+        <!-- Validation Summary -->
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <!-- Display Image if Exists -->
         @if (ViewData["Image"] as string is not null)
         {
-
-            <div class="mb-3">
+            <div class="mb-3 text-center">
                 <img src="~/Files/Images/@ViewData["Image"]"
                      alt="Employee Image"
                      class="rounded-circle"
@@ -21,11 +22,11 @@
             </div>
         }
 
-
+        <!-- Partial View for Employee Edit Form -->
         <partial name="PartialViews/CreateEditEmployeePartilaView" />
 
-
-        <div class="mt-4 m-auto">
+        <!-- Submit Button and Back to List Button -->
+        <div class="text-center mt-4">
             <input class="btn btn-success" type="submit" value="Save" />
             <a asp-controller="Employees" asp-action="Index" class="btn btn-outline-dark">Back to list</a>
         </div>

@@ -13,6 +13,7 @@
     <style>
         body {
             background-color: #f8f9fa;
+            padding-bottom: 100px; /* إضافة هوامش أسفل لضمان أن المحتوى لا يلتصق بالـ footer */
         }
 
         .navbar {
@@ -27,11 +28,24 @@
         footer {
             background-color: #f1f1f1;
             padding: 1rem 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
         }
 
         .nav-link:hover {
             color: #0d6efd !important;
             text-decoration: underline;
+        }
+
+        .footer {
+            margin-top: 100px; /* توفير مساحة بين المحتوى والـ footer */
+        }
+
+        /* تعديل مكان الـ Privacy link */
+        .privacy-link {
+            position: relative;
+            top: 20px; /* تقليل المسافة التي يرفع بها الـ Privacy link */
         }
     </style>
 </head>
@@ -74,7 +88,7 @@
     <footer class="footer text-center border-top text-muted mt-5">
         <div class="container py-2">
             &copy; 2025 - Demo.presentation -
-            <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none ms-1">Privacy</a>
+            <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none ms-1 privacy-link">Privacy</a>
         </div>
     </footer>
 

@@ -6,6 +6,8 @@ using Demo.DAL.Data.Contexts;
 using Demo.DAL.Models.IdentityModel;
 using Demo.DAL.Repositories.Classes;
 using Demo.DAL.Repositories.Interfaces;
+using Demo.presentation.Helper;
+using Demo.presentation.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +60,13 @@ namespace Demo.presentation
             {
                 options.LoginPath = "/Account/Login";
             });
+
+            builder.Services.Configure<MailSettings>(
+                builder.Configuration.GetSection("MailSettings")
+            );
+
+            //Mail Service
+            builder.Services.AddScoped<IMailService, MailService>();
 
             #endregion
 

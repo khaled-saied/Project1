@@ -1,26 +1,25 @@
-﻿
-@model DepartmentViewModel
+﻿@model DepartmentViewModel
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Department";
 }
 
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="text-center text-primary mb-4">Edit Department</h2>
+            <form method="post" asp-controller="Departments" asp-action="Edit">
 
+                @* Partial View for Create/Edit Form *@
+                <partial name="PartialViews/CreateEditPartialView" />
 
-<div class="row justify-content-center align-content-center mt-3">
-    <h1 class="col-8 my-4">Edit Department</h1>
-    <form method="post" asp-controller="Departments" asp-action="Edit" class="col-8">
-
-        <partial name="PartialViews/CreateEditPartialView" />
-
-
-        <div class="mt-4 m-auto">
-            <input class="btn btn-success" type="submit" value="Edit" />
-            <a asp-controller="Departments" asp-action="Index" class="btn btn-outline-dark">Back to list</a>
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-success px-4">Edit</button>
+                    <a asp-controller="Departments" asp-action="Index" class="btn btn-outline-dark px-4">Back to list</a>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
-
-
 
 @section Scripts {
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>

@@ -1,17 +1,18 @@
 ﻿@using Demo.BLL.DataTransferObjects.DepartmentDto
-
 @model IEnumerable<DepartmentDto>
+
 @{
 	ViewData["Title"] = "Index";
 }
 
-@* toast Of Create *@
+<!--  Toast Message -->
 @if (!string.IsNullOrWhiteSpace(TempData["Message"] as string))
 {
-	<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed p-3" style="bottom: 25px; right:25px; z-index: 100;">
-		<div class="toast fade show " role="alert" aria-live="assertive" aria-atomic="true">
-			<div class="toast-header">
-				<strong class="me-auto text-success">Success!!</strong>
+	<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed p-3" style="bottom: 25px; right:25px; z-index: 1000;">
+		<div class="toast fade show bg-light shadow" role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="toast-header bg-success text-white">
+				<i class="fa-solid fa-check-circle me-2"></i>
+				<strong class="me-auto">Success</strong>
 				<small>Just now</small>
 				<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
 			</div>
@@ -21,64 +22,72 @@
 		</div>
 	</div>
 
+	@section Scripts {
+		<script>
+			setTimeout(function () {
+				$('.toast').toast('hide');
+			}, 2000);
+		</script>
+	}
 }
 
+<h2 class="text-center text-primary fw-bold my-4">All Departments</h2>
 
-<h1 class="text-bg-primary text-center my-2">All Department</h1>
-<br />
+<div class="d-flex justify-content-end mb-4">
+	<a asp-controller="Departments" asp-action="Create" class="btn btn-success fw-semibold">
+		<i class="fa-solid fa-plus me-1"></i> Create Department
+	</a>
+</div>
 
-<a asp-controller="Departments" asp-action="Create" class="btn btn-primary font-weight-bold my-4">Create Department</a>
-
+<!-- Table Display -->
 @if (Model?.Any() ?? false)
 {
-	<table class="table table-hover">
-		<thead class="text-center">
-			<tr>
-				<th>@Html.DisplayNameFor(D => D.Code)</th>
-				<th>@Html.DisplayNameFor(D => D.Name)</th>
-				<th>@Html.DisplayNameFor(D => D.Description)</th>
-				<th>@Html.DisplayNameFor(D => D.DateOfCreation)</th>
-				<th>Details</th>
-				<th>Update</th>
-				<th>Delete</th>
-			</tr>
-		</thead>
-		<tbody class="text-center">
-			@foreach (var item in Model)
-			{
+	<div class="table-responsive">
+		<table class="table table-bordered table-hover shadow-sm">
+			<thead class="table-primary text-center align-middle">
 				<tr>
-					<td>@item.Code</td>
-					<td>@item.Name</td>
-					<td>@item.Description</td>
-					<td>@item.DateOfCreation</td>
-
-					@* _ButtonsPartialView *@
-					<partial name="_ButtonsPartialView" model="@item.Id" />
-
-
-					<td>
-						<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">
-							<i class="fas fa-trash"></i>
-							Delete
-						</a>
-					</td>
+					<th>@Html.DisplayNameFor(D => D.Code)</th>
+					<th>@Html.DisplayNameFor(D => D.Name)</th>
+					<th>@Html.DisplayNameFor(D => D.Description)</th>
+					<th>@Html.DisplayNameFor(D => D.DateOfCreation)</th>
+					<th colspan="3">Actions</th>
 				</tr>
-			}
-		</tbody>
-	</table>
+			</thead>
+			<tbody class="text-center align-middle">
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td>@item.Code</td>
+						<td>@item.Name</td>
+						<td>@item.Description</td>
+						<td>@item.DateOfCreation.ToShortDateString()</td>
+
+						<partial name="_ButtonsPartialView" model="@item.Id" />
+
+						<td>
+							<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger">
+								<i class="fas fa-trash-alt me-1"></i> Delete
+							</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
 }
 else
 {
-	<div class="alert alert-info">
-		No Department Found @for (int i = 0; i < 3; i++)
+	<div class="alert alert-info text-center">
+		No Departments Found
+		@for (int i = 0; i < 3; i++)
 		{
-			<i class="fa-solid fa-exclamation"></i>
+			<i class="fa-solid fa-exclamation mx-1"></i>
 		}
 	</div>
 }
 
+<!-- ✅ Scripts Section -->
 @section Scripts {
 	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 }
-

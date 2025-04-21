@@ -1,13 +1,16 @@
 ﻿using Demo.DAL.Models.IdentityModel;
+using Demo.presentation.Helper;
 using Demo.presentation.Utilities;
 using Demo.presentation.ViewModels.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Demo.presentation.Controllers
 {
     public class AccountController(UserManager<ApplicationUser> _userManager,
-                                    SignInManager<ApplicationUser> _signInManager) : Controller
+                                    SignInManager<ApplicationUser> _signInManager,
+                                    IMailService _mailService) : Controller
     {
         #region Register
         [HttpGet]
@@ -16,28 +19,37 @@ namespace Demo.presentation.Controllers
         [HttpPost]
         public IActionResult Register(RegisterViewModel registerViewModel)
         {
-            if (!ModelState.IsValid) return View(registerViewModel);
-
-            var User = new ApplicationUser
+            if (ModelState.IsValid)
             {
-                UserName = registerViewModel.UserName,
-                Email = registerViewModel.Email,
-                FirstName = registerViewModel.FirstName,
-                LastName = registerViewModel.LastName
-            };
+                var existingUser =  _userManager.Users.FirstOrDefaultAsync(u => u.Email == registerViewModel.Email).Result;
 
-            var Result = _userManager.CreateAsync(User, registerViewModel.Password).Result;
-
-            if (Result.Succeeded)
-                return RedirectToAction("Login", "Account");
-            else
-            {
-                foreach (var error in Result.Errors)
+                if (existingUser != null)
                 {
-                    ModelState.AddModelError("", error.Description);
+                    TempData["EmailExists"] = "This Email is already used!!";
+                    return View(registerViewModel);
                 }
-                return View(registerViewModel);
+
+                var User = new ApplicationUser
+                {
+                    UserName = registerViewModel.UserName,
+                    Email = registerViewModel.Email,
+                    FirstName = registerViewModel.FirstName,
+                    LastName = registerViewModel.LastName
+                };
+
+                var Result = _userManager.CreateAsync(User, registerViewModel.Password).Result;
+
+                if (Result.Succeeded)
+                    return RedirectToAction("Login", "Account");
+                else
+                {
+                    foreach (var error in Result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
             }
+                    return View(registerViewModel);
         }
         #endregion
 
@@ -101,7 +113,8 @@ namespace Demo.presentation.Controllers
                     };
 
                     // Send Email
-                    EmailSettings.SendEmail(email);
+                    //EmailSettings.SendEmail(email);
+                    _mailService.Send(email);
                     return RedirectToAction(nameof(CheckYourInbox));
                 }
             }
