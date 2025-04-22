@@ -5,48 +5,44 @@
     Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
 
-<form class="form" asp-action="Login" asp-controller="Account" method="post">
+<div class="form-wrapper">
+    <form class="form" asp-action="Login" asp-controller="Account" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-    <div asp-validation-summary="ModelOnly"></div>
+        <p class="title">Sign In</p>
+        <p class="message">Sign in now and get full access to our app.</p>
 
-    <p class="title">Sign In</p>
-    <p class="message">Sign in now and get full access to our app.</p>
+        <label>
+            <input required class="input form-control" asp-for="Email" placeholder="Email" />
+        </label>
 
-    <label>
-        <input required class="input" asp-for="Email" />
-        <span>Email</span>
-    </label>
+        <label>
+            <input required class="input form-control" asp-for="Password" placeholder="Password" />
+        </label>
 
-    <label>
-        <input required class="input" asp-for="Password" />
-        <span>Password</span>
-    </label>
-
-    <div class="flex-row">
-        <div>
-            <input asp-for="RememberMe" />
-            <label>Remember me</label>
+        <div class="form-check mb-3">
+            <input class="form-check-input" asp-for="RememberMe" />
+            <label class="form-check-label">Remember me</label>
         </div>
-    </div>
 
-    <button type="submit" class="submit" style="cursor:pointer">Submit</button>
+        <button type="submit" class="btn btn-signin w-100 mb-3">Sign In</button>
 
-    <!-- login With Goolge  -->
+
     <a asp-action="GoogleLogin" class="google-btn">
-        <div class="google-icon-wrapper">
-            <img class="google-icon" src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" />
-        </div>
-        <span class="btn-text">Sign in with Google</span>
+        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" class="google-icon" />
+        Sign in with Google
     </a>
 
+    <div class="text-center mt-4">
+        <p>
+            Don't have an account?
+            <a asp-action="Register" asp-controller="Account">Register</a>
+        </p>
+        <p>
+            <a asp-action="ForgetPassword" asp-controller="Account">Forgot your password?</a>
+        </p>
+    </div>
+        
+    </form>
 
-    <p class="signin">
-        Don't have an account?
-        <a asp-action="Register" asp-controller="Account">Register</a>
-    </p>
-
-    <p class="forgot-password-link">
-        <a asp-action="ForgetPassword" asp-controller="Account">Forgot your password?</a>
-    </p>
-
-</form>
+</div>

@@ -74,7 +74,7 @@ namespace Demo.presentation.Controllers
                     {
                         var result = _signInManager.PasswordSignInAsync(user, loginViewModel.Password, loginViewModel.RememberMe, false).Result;
                         if (result.Succeeded)
-                            return RedirectToAction(nameof(HomeController.Index), "Home");
+                            return RedirectToAction("Index","Home");
 
                     }
                 }

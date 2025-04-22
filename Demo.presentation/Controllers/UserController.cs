@@ -1,4 +1,5 @@
-﻿using Demo.DAL.Models.IdentityModel;
+﻿using System.Threading.Tasks;
+using Demo.DAL.Models.IdentityModel;
 using Demo.presentation.ViewModels.User;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +10,8 @@ namespace Demo.presentation.Controllers
 {
     public class UserController(UserManager<ApplicationUser> _userManger,
                                 IWebHostEnvironment _webHostEnvironment,
-                                ILogger<UserController> _logger) : Controller
+                                ILogger<UserController> _logger,
+                                SignInManager<ApplicationUser> _signInManager) : Controller
     {
         public IActionResult Index(string UserSearch)
         {
@@ -107,47 +109,63 @@ namespace Demo.presentation.Controllers
             return NotFound();
         }
 
+
         [HttpPost]
-        public IActionResult ConfirmDelete(string id)
+        public async Task<IActionResult> ConfirmDelete(string id)
         {
-            if (string.IsNullOrWhiteSpace(id)) return BadRequest();
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (string.IsNullOrWhiteSpace(id))
+                return BadRequest();
+
             try
             {
-                var user = _userManger.Users.FirstOrDefaultAsync(x => x.Id == id).Result;
-                if (user is not null)
-                {
-                    var result = _userManger.DeleteAsync(user).Result;
+                var currentUser = await _userManger.GetUserAsync(User);
 
-                    if (result.Succeeded)
-                    {
-                        TempData["SuccessMessage"] = "User deleted successfully!";
-                        return RedirectToAction("Index");
-                    }
-                }
-                else
+                if (currentUser is null)
                 {
-                    ModelState.AddModelError("", "Failed to delete User");
-                    return RedirectToAction(nameof(Index), new { id = id });
+                    TempData["ErrorMessage"] = "Current user not found.";
+                    return RedirectToAction("Login", "Account");
                 }
 
+                var user = await _userManger.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (user is null)
+                {
+                    TempData["ErrorMessage"] = "User not found.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var result = await _userManger.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    if (user.Id == currentUser.Id)
+                        return RedirectToAction("Login", "Account");
+
+                    TempData["SuccessMessage"] = "User deleted successfully!";
+                    return RedirectToAction("Index");
+                }
+
+                TempData["ErrorMessage"] = "Failed to delete user!";
+                return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                //ModelState.AddModelError("", ex.Message);
                 if (_webHostEnvironment.IsDevelopment())
                 {
-                    //1- Devolpment=> log error in console and return error message to user
-                    //ModelState.AddModelError("", ex.Message);
+                    TempData["ErrorMessage"] = ex.Message;
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    //2-Deployment=> log error in file or database and return  error view,
                     _logger.LogError(ex.Message);
                     return View("ErrorView", ex);
                 }
             }
-            return NotFound();
         }
 
         #endregion

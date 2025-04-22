@@ -148,3 +148,113 @@
         text-decoration: underline;
     }
 
+
+
+
+
+/* Form Wrapper */
+.form-wrapper {
+    max-width: 400px;
+    margin: auto;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    background-color: #fff;
+}
+
+/* Title Style */
+.title {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Message Style */
+.message {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* Input Fields */
+.input.form-control {
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Button Style */
+.btn.btn-primary {
+    font-weight: bold;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* Google Login Button */
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Google Icon */
+.google-icon {
+    width: 20px;
+    margin-right: 10px;
+}
+
+/* Form Check */
+.form-check {
+    margin-bottom: 15px;
+}
+
+/* Forgot Password and Register Links */
+.text-center p {
+    margin: 10px 0;
+}
+
+.text-center a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+    .text-center a:hover {
+        text-decoration: underline;
+    }
+
+
+
+
+/* Button Sign In */
+.btn-signin {
+    font-weight: bold;
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .btn-signin:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    .btn-signin:active {
+        background-color: #004085;
+        transform: scale(1);
+    }
+
+    .btn-signin:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
