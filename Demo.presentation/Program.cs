@@ -6,6 +6,9 @@ using Demo.DAL.Data.Contexts;
 using Demo.DAL.Models.IdentityModel;
 using Demo.DAL.Repositories.Classes;
 using Demo.DAL.Repositories.Interfaces;
+using Demo.presentation.Helper;
+using Demo.presentation.Settings;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +54,39 @@ namespace Demo.presentation
 
             //Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                             .AddEntityFrameworkStores<ApplicationDbContext>();
+                             .AddEntityFrameworkStores<ApplicationDbContext>()
+                             .AddDefaultTokenProviders();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+            });
+
+            builder.Services.Configure<MailSettings>(
+                builder.Configuration.GetSection("MailSettings")
+            );
+
+            builder.Services.Configure<SmsSettings>(
+                builder.Configuration.GetSection("Twilio")
+            );
+
+            //Mail Service
+            builder.Services.AddTransient<IMailService, MailService>();
+            //Sms Service
+            builder.Services.AddTransient<ISmsService, SmsService>();
+
+
+
+            builder.Services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            }).AddGoogle(o=>
+            {
+                IConfiguration GooleConfiguration = builder.Configuration.GetSection("Authentication:Google");
+                o.ClientId = GooleConfiguration["ClientId"];
+                o.ClientSecret = GooleConfiguration["ClientSecret"];
+            });
 
             #endregion
 
@@ -71,12 +106,13 @@ namespace Demo.presentation
 
             app.UseRouting();
 
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                //pattern: "{controller=Account}/{action=Register}/{id?}");
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Register}/{id?}");
+        //pattern: "{controller=Home}/{action=Index}/{id?}");
 
             #endregion
 

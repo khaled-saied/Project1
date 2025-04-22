@@ -5,10 +5,12 @@ using Demo.BLL.Services.ServicesOfEmployee;
 using Demo.DAL.Models.EmployeeModels;
 using Demo.DAL.Models.Shared.Enums;
 using Demo.presentation.ViewModels.EmployeeViewMode;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.presentation.Controllers
 {
+    [Authorize]
     public class EmployeesController(IEmployeeServices _employeeServices,
                                      IWebHostEnvironment _webHostEnvironment,
                                      ILogger<EmployeesController> _logger,

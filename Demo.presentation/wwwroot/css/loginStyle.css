@@ -1,0 +1,260 @@
+﻿
+.form {
+    background-color: #fff;
+    display: block;
+    padding: 1rem;
+    max-width: 350px;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.form-title {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+    text-align: center;
+    color: #000;
+}
+
+.input-container {
+    position: relative;
+}
+
+    .input-container input, .form button {
+        outline: none;
+        border: 1px solid #e5e7eb;
+        margin: 8px 0;
+    }
+
+    .input-container input {
+        background-color: #fff;
+        padding: 1rem;
+        padding-right: 3rem;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        width: 300px;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .input-container span {
+        display: grid;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        place-content: center;
+    }
+
+        .input-container span svg {
+            color: #9CA3AF;
+            width: 1rem;
+            height: 1rem;
+        }
+
+.submit {
+    display: block;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    background-color: #4F46E5;
+    color: #ffffff;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    width: 100%;
+    border-radius: 0.5rem;
+    text-transform: uppercase;
+}
+
+.signup-link {
+    color: #6B7280;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-align: center;
+}
+
+    .signup-link a {
+        text-decoration: underline;
+    }
+
+
+/*Login with Google*/
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto;
+    padding: 10px 15px;
+    background-color: #fff;
+    color: #444;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: box-shadow 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.google-btn:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    background-color: #f7f7f7;
+}
+
+.google-icon-wrapper {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.google-icon {
+    width: 100%;
+    height: auto;
+}
+
+.btn-text {
+    flex: 1;
+    text-align: center;
+}
+
+
+
+/*forget Password*/
+
+.forgot-password-link {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.forgot-password-link a {
+    color: #0066cc;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s ease;
+    font-weight: 500;
+}
+
+    .forgot-password-link a:hover {
+        color: #004a99;
+        text-decoration: underline;
+    }
+
+
+
+
+
+/* Form Wrapper */
+.form-wrapper {
+    max-width: 400px;
+    margin: auto;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    background-color: #fff;
+}
+
+/* Title Style */
+.title {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Message Style */
+.message {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* Input Fields */
+.input.form-control {
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* Button Style */
+.btn.btn-primary {
+    font-weight: bold;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* Google Login Button */
+.google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fff;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Google Icon */
+.google-icon {
+    width: 20px;
+    margin-right: 10px;
+}
+
+/* Form Check */
+.form-check {
+    margin-bottom: 15px;
+}
+
+/* Forgot Password and Register Links */
+.text-center p {
+    margin: 10px 0;
+}
+
+.text-center a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+    .text-center a:hover {
+        text-decoration: underline;
+    }
+
+
+
+
+/* Button Sign In */
+.btn-signin {
+    font-weight: bold;
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .btn-signin:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    .btn-signin:active {
+        background-color: #004085;
+        transform: scale(1);
+    }
+
+    .btn-signin:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }

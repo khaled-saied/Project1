@@ -1,0 +1,174 @@
+﻿using System.Threading.Tasks;
+using Demo.DAL.Models.IdentityModel;
+using Demo.presentation.ViewModels.User;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace Demo.presentation.Controllers
+{
+    public class UserController(UserManager<ApplicationUser> _userManger,
+                                IWebHostEnvironment _webHostEnvironment,
+                                ILogger<UserController> _logger,
+                                SignInManager<ApplicationUser> _signInManager) : Controller
+    {
+        public IActionResult Index(string UserSearch)
+        {
+            var users = _userManger.Users;
+
+            if (!string.IsNullOrWhiteSpace(UserSearch))
+            {
+                users = users.Where(u =>
+                    u.FirstName.Contains(UserSearch) ||
+                    u.LastName.Contains(UserSearch));
+            }
+
+            return View(users.ToList());
+        }
+
+        #region Details
+        [HttpGet]
+        public IActionResult Details(string id)
+        {
+            var user = _userManger.Users.FirstOrDefaultAsync(x => x.Id == id).Result;
+            if (user is not null)
+            {
+                var UserDetailsDto = new UserDetailsDto()
+                {
+                    Id = user.Id,
+                    FName = user.FirstName,
+                    LName = user.LastName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber
+                };
+                return View(UserDetailsDto);
+            }
+            return NotFound();
+        }
+        #endregion
+
+        #region Edit
+        [HttpGet]
+        public IActionResult Edit(string id)
+        {
+            var User = _userManger.Users.FirstOrDefaultAsync(x => x.Id == id).Result;
+            if (User is not null)
+            {
+                var UserDetailsDto = new UpdatedUserDto()
+                {
+                    Id = User.Id,
+                    FName = User.FirstName,
+                    LName = User.LastName,
+                    PhoneNumber = User.PhoneNumber
+                };
+                return View(UserDetailsDto);
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult Edit(UpdatedUserDto updatedUserDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _userManger.Users.FirstOrDefaultAsync(x => x.Id == updatedUserDto.Id).Result;
+                if (user is not null)
+                {
+                    user.FirstName = updatedUserDto.FName;
+                    user.LastName = updatedUserDto.LName;
+                    user.PhoneNumber = updatedUserDto.PhoneNumber;
+                    var result = _userManger.UpdateAsync(user).Result;
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+            }
+            return View(updatedUserDto);
+        }
+        #endregion
+
+        #region Delete
+        [HttpGet]
+        public IActionResult Delete(string id)
+        {
+            var user = _userManger.Users.FirstOrDefaultAsync(x => x.Id == id).Result;
+            if (user is not null)
+            {
+                var UserDetailsDto = new UserDetailsDto()
+                {
+                    Id = user.Id,
+                    FName = user.FirstName,
+                    LName = user.LastName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber
+                };
+                return View(UserDetailsDto);
+            }
+            return NotFound();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmDelete(string id)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (string.IsNullOrWhiteSpace(id))
+                return BadRequest();
+
+            try
+            {
+                var currentUser = await _userManger.GetUserAsync(User);
+
+                if (currentUser is null)
+                {
+                    TempData["ErrorMessage"] = "Current user not found.";
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var user = await _userManger.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (user is null)
+                {
+                    TempData["ErrorMessage"] = "User not found.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                var result = await _userManger.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    if (user.Id == currentUser.Id)
+                        return RedirectToAction("Login", "Account");
+
+                    TempData["SuccessMessage"] = "User deleted successfully!";
+                    return RedirectToAction("Index");
+                }
+
+                TempData["ErrorMessage"] = "Failed to delete user!";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                if (_webHostEnvironment.IsDevelopment())
+                {
+                    TempData["ErrorMessage"] = ex.Message;
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    _logger.LogError(ex.Message);
+                    return View("ErrorView", ex);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+}

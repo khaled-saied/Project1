@@ -1,4 +1,6 @@
-﻿@model RegisterViewModel
+﻿@using Demo.presentation.ViewModels.Auth
+@model RegisterViewModel
+
 @{
 	ViewData["Title"] = "Register";
 	Layout = "~/Views/Shared/_AuthLayout.cshtml";
@@ -13,31 +15,40 @@
 	<p class="message">Signup now and get full access to our app. </p>
 
 	<label>
-		<input required="" class="input" asp-for="FirstName">
+		<input required class="input" asp-for="FirstName">
 		<span>Firstname</span>
 	</label>
 
 	<label>
-		<input required=""  class="input" asp-for="LastName">
+		<input required class="input" asp-for="LastName">
 		<span>Lastname</span>
 	</label>
 
 	<label>
-		<input required=""  class="input" asp-for="UserName">
+		<input required class="input" asp-for="UserName">
 		<span>User Name</span>
 	</label>
 
 	<label>
-		<input required=""  class="input" asp-for="Email">
+		<input required class="input" asp-for="Email">
 		<span>Email</span>
 	</label>
 
+	<!--  -->
+	@if (TempData["EmailExists"] != null)
+	{
+		<span class="text-danger" style="font-size: 14px; display: block; margin-top: 5px;">
+			@TempData["EmailExists"]
+		</span>
+	}
+
 	<label>
-		<input required=""  class="input" asp-for="Password">
+		<input required class="input" asp-for="Password">
 		<span>Password</span>
 	</label>
+
 	<label>
-		<input required=""  class="input" asp-for="ConfirmPassword">
+		<input required class="input" asp-for="ConfirmPassword">
 		<span>Confirm password</span>
 	</label>
 
@@ -48,7 +59,6 @@
 		</div>
 	</div>
 
-	
 	<button type="submit" class="submit">Submit</button>
-	<p class="signin">Already have an acount ? <a asp-action="Login" asp-controller="Account">Signin</a> </p>
+	<p class="signin">Already have an account? <a asp-action="Login" asp-controller="Account">Signin</a> </p>
 </form>
