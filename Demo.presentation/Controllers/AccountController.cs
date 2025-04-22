@@ -2,6 +2,7 @@
 using Demo.presentation.Helper;
 using Demo.presentation.Utilities;
 using Demo.presentation.ViewModels.Auth;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,8 @@ namespace Demo.presentation.Controllers
 {
     public class AccountController(UserManager<ApplicationUser> _userManager,
                                     SignInManager<ApplicationUser> _signInManager,
-                                    IMailService _mailService) : Controller
+                                    IMailService _mailService,
+                                    ISmsService _smsService) : Controller
     {
         #region Register
         [HttpGet]
@@ -94,6 +96,7 @@ namespace Demo.presentation.Controllers
         public IActionResult ForgetPassword() => View();
 
 
+        //Mail
         [HttpPost]
         public IActionResult SendResetPasswordLink(ForgetPasswordViewModel viewModel)
         {
@@ -121,6 +124,35 @@ namespace Demo.presentation.Controllers
             ModelState.AddModelError("", "Invalid Email");
             return View("ForgetPassword", viewModel);
         }
+
+        //Sms
+        [HttpPost]
+        public IActionResult SendResetPasswordLinkSms(ForgetPasswordViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var User = _userManager.FindByEmailAsync(viewModel.Email).Result;
+                if (User is not null)
+                {
+                    // Generate Token
+                    var Token = _userManager.GeneratePasswordResetTokenAsync(User).Result;
+                    var ResetPasswordLink = Url.Action("ResetPassword", "Account", new { email = viewModel.Email, Token }, Request.Scheme);
+                   
+                    var SmsMessage = new SmsMessage
+                    {
+                        PhoneNumber = User.PhoneNumber,
+                        Body = ResetPasswordLink
+                    };
+
+                    // Send Sms
+                    _smsService.SendSms(SmsMessage);
+                    return Ok("Sms Sent Successfully");
+                }
+            }
+            ModelState.AddModelError("", "Invalid Email");
+            return View("ForgetPassword", viewModel);
+        }
+
 
         public IActionResult CheckYourInbox()
         {

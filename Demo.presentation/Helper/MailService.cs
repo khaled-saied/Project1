@@ -1,12 +1,11 @@
 ﻿//using System.Net.Mail;
-using Demo.presentation.Helper;
 using Demo.presentation.Settings;
 using Demo.presentation.Utilities;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace Demo.presentation
+namespace Demo.presentation.Helper
 {
     public class MailService(IOptions<MailSettings> _options) : IMailService
     {

@@ -27,7 +27,7 @@ namespace Demo.presentation.Controllers
         [HttpPost]
         public IActionResult Create(string roleName)
         {
-            if (roleName.IsNullOrEmpty())
+            if (string.IsNullOrEmpty(roleName))
             {
                 ModelState.AddModelError("", "Role name is required");
                 return View();

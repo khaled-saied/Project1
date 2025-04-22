@@ -65,8 +65,14 @@ namespace Demo.presentation
                 builder.Configuration.GetSection("MailSettings")
             );
 
+            builder.Services.Configure<SmsSettings>(
+                builder.Configuration.GetSection("Twilio")
+            );
+
             //Mail Service
-            builder.Services.AddScoped<IMailService, MailService>();
+            builder.Services.AddTransient<IMailService, MailService>();
+            //Sms Service
+            builder.Services.AddTransient<ISmsService, SmsService>();
 
             #endregion
 
