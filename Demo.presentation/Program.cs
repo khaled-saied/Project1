@@ -8,6 +8,7 @@ using Demo.DAL.Repositories.Classes;
 using Demo.DAL.Repositories.Interfaces;
 using Demo.presentation.Helper;
 using Demo.presentation.Settings;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -73,6 +74,19 @@ namespace Demo.presentation
             builder.Services.AddTransient<IMailService, MailService>();
             //Sms Service
             builder.Services.AddTransient<ISmsService, SmsService>();
+
+
+
+            builder.Services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            }).AddGoogle(o=>
+            {
+                IConfiguration GooleConfiguration = builder.Configuration.GetSection("Authentication:Google");
+                o.ClientId = GooleConfiguration["ClientId"];
+                o.ClientSecret = GooleConfiguration["ClientSecret"];
+            });
 
             #endregion
 

@@ -5,35 +5,48 @@
     Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
 
-
-
-<!-- From Uiverse.io by Yaya12085 -->
 <form class="form" asp-action="Login" asp-controller="Account" method="post">
 
-	<div asp-validation-summary="ModelOnly"></div>
+    <div asp-validation-summary="ModelOnly"></div>
 
-	<p class="title">SignIn </p>
-	<p class="message">SignIn now and get full access to our app. </p>
+    <p class="title">Sign In</p>
+    <p class="message">Sign in now and get full access to our app.</p>
 
-	<label>
-		<input required="" class="input" asp-for="Email">
-		<span>Email</span>
-	</label>
+    <label>
+        <input required class="input" asp-for="Email" />
+        <span>Email</span>
+    </label>
 
-	<label>
-		<input required="" class="input" asp-for="Password">
-		<span>Password</span>
-	</label>
+    <label>
+        <input required class="input" asp-for="Password" />
+        <span>Password</span>
+    </label>
 
-	<div class="flex-row">
-		<div>
-			<input asp-for="RememberMe">
-			<label>Remember me </label>
-		</div>
-	</div>
+    <div class="flex-row">
+        <div>
+            <input asp-for="RememberMe" />
+            <label>Remember me</label>
+        </div>
+    </div>
+
+    <button type="submit" class="submit" style="cursor:pointer">Submit</button>
+
+    <!-- login With Goolge  -->
+    <a asp-action="GoogleLogin" class="google-btn">
+        <div class="google-icon-wrapper">
+            <img class="google-icon" src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" />
+        </div>
+        <span class="btn-text">Sign in with Google</span>
+    </a>
 
 
-	<button type="submit" class="submit" style="cursor:pointer">Submit</button>
-	<p class="signin">Don't have an acount ? <a asp-action="Register" asp-controller="Account">Register</a> </p>
-	<a class="forgot" asp-action="ForgetPassword" asp-controller="Account">Forgot Password?</a>
+    <p class="signin">
+        Don't have an account?
+        <a asp-action="Register" asp-controller="Account">Register</a>
+    </p>
+
+    <p class="forgot-password-link">
+        <a asp-action="ForgetPassword" asp-controller="Account">Forgot your password?</a>
+    </p>
+
 </form>

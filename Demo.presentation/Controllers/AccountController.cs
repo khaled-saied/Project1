@@ -2,6 +2,8 @@
 using Demo.presentation.Helper;
 using Demo.presentation.Utilities;
 using Demo.presentation.ViewModels.Auth;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -80,6 +82,34 @@ namespace Demo.presentation.Controllers
             }
             return View(loginViewModel);
         }
+
+        //Login with Google
+        public IActionResult GoogleLogin()
+        {
+            var Prop = new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("GoogleResponse")
+            };  
+
+            return Challenge(Prop, GoogleDefaults.AuthenticationScheme);
+        }
+
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+
+            var Claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
+            {
+                claim.Issuer,
+                claim.OriginalIssuer,
+                claim.Type,
+                claim.Value
+
+            });
+
+            return RedirectToAction("Index", "Home");
+        }
+
         #endregion
 
         #region SignOut
