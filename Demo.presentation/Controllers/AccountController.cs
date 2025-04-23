@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.presentation.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class AccountController(UserManager<ApplicationUser> _userManager,
                                     SignInManager<ApplicationUser> _signInManager,
                                     IMailService _mailService,
@@ -91,10 +91,12 @@ namespace Demo.presentation.Controllers
             var Prop = new AuthenticationProperties
             {
                 RedirectUri = Url.Action("GoogleResponse")
-            };  
+            };
 
             return Challenge(Prop, GoogleDefaults.AuthenticationScheme);
+
         }
+
 
         public async Task<IActionResult> GoogleResponse()
         {
