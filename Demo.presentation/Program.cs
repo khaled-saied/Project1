@@ -77,16 +77,24 @@ namespace Demo.presentation
 
 
 
-            builder.Services.AddAuthentication(o =>
-            {
-                o.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
-                o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-            }).AddGoogle(o=>
-            {
-                IConfiguration GooleConfiguration = builder.Configuration.GetSection("Authentication:Google");
-                o.ClientId = GooleConfiguration["ClientId"];
-                o.ClientSecret = GooleConfiguration["ClientSecret"];
-            });
+            builder.Services.AddAuthentication() // Îáíå ÝÇÖí åäÇ¡ ÚáÔÇä Identity ÊÖÈØå ÈäÝÓåÇ
+    .AddGoogle(o =>
+    {
+        var googleConfig = builder.Configuration.GetSection("Authentication:Google");
+        o.ClientId = googleConfig["ClientId"];
+        o.ClientSecret = googleConfig["ClientSecret"];
+    });
+
+            //builder.Services.AddAuthentication(o =>
+            //{
+            //    o.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+            //    o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            //}).AddGoogle(o=>
+            //{
+            //    var GooleConfiguration = builder.Configuration.GetSection("Authentication:Google");
+            //    o.ClientId = GooleConfiguration["ClientId"];
+            //    o.ClientSecret = GooleConfiguration["ClientSecret"];
+            //});
 
             #endregion
 
@@ -106,8 +114,10 @@ namespace Demo.presentation
 
             app.UseRouting();
 
+
             app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.MapControllerRoute(
                 name: "default",

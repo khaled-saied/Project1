@@ -1,4 +1,5 @@
 ﻿using Demo.DAL.Models.IdentityModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Demo.presentation.Controllers
 {
+    [Authorize]
     public class RoleController(RoleManager<IdentityRole> _roleManager,
                                 IWebHostEnvironment _environment,
                                 ILogger<RoleController> _logger) : Controller

@@ -10,9 +10,10 @@ namespace Demo.presentation.ViewModels.Auth
         [Required]
         [MaxLength(50)]
         public string LastName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "The name is already in use") ]
         [MaxLength(50)]
         public string UserName { get; set; } // Unique 
+        [Required(ErrorMessage = "The email is already in use")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [DataType(DataType.Password)]

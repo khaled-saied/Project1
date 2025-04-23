@@ -4,6 +4,7 @@ using Demo.presentation.Utilities;
 using Demo.presentation.ViewModels.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.presentation.Controllers
 {
+    [Authorize]
     public class AccountController(UserManager<ApplicationUser> _userManager,
                                     SignInManager<ApplicationUser> _signInManager,
                                     IMailService _mailService,

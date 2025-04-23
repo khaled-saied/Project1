@@ -1,48 +1,57 @@
-﻿@using Demo.presentation.ViewModels.Auth
-@model LoginViewModel
+﻿@model LoginViewModel
 @{
     ViewData["Title"] = "Login";
     Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
 
-<div class="form-wrapper">
-    <form class="form" asp-action="Login" asp-controller="Account" method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="auth-title">Login</h2>
 
-        <p class="title">Sign In</p>
-        <p class="message">Sign in now and get full access to our app.</p>
+        <form asp-action="Login" method="post" class="auth-form">
+            <div asp-validation-summary="All" class="text-danger"></div>
 
-        <label>
-            <input required class="input form-control" asp-for="Email" placeholder="Email" />
-        </label>
+            <div class="input-group">
+                <input asp-for="Email" class="auth-input" placeholder=" " required />
+                <label for="Email">Email</label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
 
-        <label>
-            <input required class="input form-control" asp-for="Password" placeholder="Password" />
-        </label>
+            <div class="input-group">
+                <input asp-for="Password" type="password" class="auth-input" placeholder=" " required />
+                <label for="Password">Password</label>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
 
-        <div class="form-check mb-3">
-            <input class="form-check-input" asp-for="RememberMe" />
-            <label class="form-check-label">Remember me</label>
-        </div>
+            <div class="auth-checkbox">
+                <label>
+                    <input asp-for="RememberMe" />
+                    <span>Keep me signed in</span>
+                </label>
+            </div>
 
-        <button type="submit" class="btn btn-signin w-100 mb-3">Sign In</button>
+            <button type="submit" class="auth-btn">Sign In</button>
+
+            <a asp-action="GoogleLogin" class="auth-btn google-btn">
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" class="google-icon" />
+                Sign in with Google
+            </a>
 
 
-    <a asp-action="GoogleLogin" class="google-btn">
-        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" class="google-icon" />
-        Sign in with Google
-    </a>
-
-    <div class="text-center mt-4">
-        <p>
-            Don't have an account?
-            <a asp-action="Register" asp-controller="Account">Register</a>
-        </p>
-        <p>
-            <a asp-action="ForgetPassword" asp-controller="Account">Forgot your password?</a>
-        </p>
+            <div class="auth-footer">
+                <p>
+                    Don't have an account?
+                    <a asp-action="Register" asp-controller="Account">Register</a>
+                </p>
+                <p>
+                    <a asp-action="ForgetPassword" asp-controller="Account">Forgot your password?</a>
+                </p>
+            </div>
+        </form>
     </div>
-        
-    </form>
-
 </div>
+
+@section Validation {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

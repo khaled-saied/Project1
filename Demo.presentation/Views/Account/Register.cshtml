@@ -1,64 +1,68 @@
-﻿@using Demo.presentation.ViewModels.Auth
-@model RegisterViewModel
+﻿@model RegisterViewModel
 
 @{
-	ViewData["Title"] = "Register";
-	Layout = "~/Views/Shared/_AuthLayout.cshtml";
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
 
-<!-- From Uiverse.io by Yaya12085 -->
-<form class="form" asp-action="Register" asp-controller="Account" method="post">
+<div class="auth-container">
+    <div class="auth-card">
+        <h2 class="auth-title">Create Your Account</h2>
 
-	<div asp-validation-summary="ModelOnly"></div>
+        <form asp-action="Register" method="post" asp-controller="Account" class="auth-form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-	<p class="title">Register </p>
-	<p class="message">Signup now and get full access to our app. </p>
+            <div class="input-group">
+                <input asp-for="FirstName" class="auth-input" placeholder=" " />
+                <label for="FirstName">First Name</label>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
 
-	<label>
-		<input required class="input" asp-for="FirstName">
-		<span>Firstname</span>
-	</label>
+            <div class="input-group">
+                <input asp-for="LastName" class="auth-input" placeholder=" " />
+                <label for="LastName">Last Name</label>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
 
-	<label>
-		<input required class="input" asp-for="LastName">
-		<span>Lastname</span>
-	</label>
+            <div class="input-group">
+                <input asp-for="UserName" class="auth-input" placeholder=" " />
+                <label for="UserName">Username</label>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
 
-	<label>
-		<input required class="input" asp-for="UserName">
-		<span>User Name</span>
-	</label>
+            <div class="input-group">
+                <input asp-for="Email" class="auth-input" placeholder=" " />
+                <label for="Email">Email</label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
 
-	<label>
-		<input required class="input" asp-for="Email">
-		<span>Email</span>
-	</label>
+            <div class="input-group">
+                <input asp-for="Password" type="password" class="auth-input" placeholder=" " />
+                <label for="Password">Password</label>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
 
-	<!--  -->
-	@if (TempData["EmailExists"] != null)
-	{
-		<span class="text-danger" style="font-size: 14px; display: block; margin-top: 5px;">
-			@TempData["EmailExists"]
-		</span>
-	}
+            <div class="input-group">
+                <input asp-for="ConfirmPassword" type="password" class="auth-input" placeholder=" " />
+                <label for="ConfirmPassword">Confirm Password</label>
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
 
-	<label>
-		<input required class="input" asp-for="Password">
-		<span>Password</span>
-	</label>
+            <div class="auth-checkbox">
+                <label>
+                    <input asp-for="IsAgree" />
+                    <span>I agree to the Terms & Conditions</span>
+                </label>
+            </div>
 
-	<label>
-		<input required class="input" asp-for="ConfirmPassword">
-		<span>Confirm password</span>
-	</label>
+            <button type="submit" class="auth-btn">Sign Up</button>
+        </form>
 
-	<div class="flex-row">
-		<div>
-			<input asp-for="IsAgree">
-			<label>Remember me </label>
-		</div>
-	</div>
+        <p class="auth-footer">Already have an account? <a asp-action="Login">Login Now!</a></p>
+    </div>
+</div>
 
-	<button type="submit" class="submit">Submit</button>
-	<p class="signin">Already have an account? <a asp-action="Login" asp-controller="Account">Signin</a> </p>
-</form>
+@section Validation {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

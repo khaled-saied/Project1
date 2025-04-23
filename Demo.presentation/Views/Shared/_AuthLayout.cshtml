@@ -1,25 +1,33 @@
 ﻿<!DOCTYPE html>
+<html lang="en">
 
-<html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your page description">
+    <meta name="author" content="Your name or company">
+    <meta name="robots" content="index, follow">
     <title>@ViewBag.Title</title>
-    <link href="~/css/authstylecss.css" rel="stylesheet" />
-	<link href="~/css/LoginStyle.css" rel="stylesheet"/>
-	<link href="~/css/ForgetPasswordSheet.css" rel="stylesheet" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+    <!-- CSS Styles -->
+    <link href="~/css/RegisterStyle.css" rel="stylesheet" />
+    <link href="~/css/loginStyle.css" rel="stylesheet" />
+    <link href="~/css/ForgetPasswordSheet.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
+
 <body>
     <!-- From Uiverse.io by Yaya12085 -->
-	<div class="container">
+    <div class="container">
+        @RenderBody()
+    </div>
 
-		@RenderBody()
+    <!-- JavaScript Libraries (defer to improve page loading) -->
+    <script src="~/lib/jquery/dist/jquery.min.js" defer></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" defer></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" defer></script>
 
-		<script src="~/lib/jquery/dist/jquery.min.js"></script>
-		<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-		<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-	</div>
-
+    @RenderSection("Validation", required: false)
 </body>
+
 </html>
