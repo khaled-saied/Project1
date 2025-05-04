@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Demo.DAL.Models.IdentityModel;
 using Demo.presentation.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.presentation.Controllers
 {
+    [Authorize]
     public class UserController(UserManager<ApplicationUser> _userManger,
                                 IWebHostEnvironment _webHostEnvironment,
                                 ILogger<UserController> _logger,
@@ -91,9 +93,11 @@ namespace Demo.presentation.Controllers
 
         #region Delete
         [HttpGet]
-        public IActionResult Delete(string id)
+        public async Task<IActionResult> Delete(string? id)
         {
-            var user = _userManger.Users.FirstOrDefaultAsync(x => x.Id == id).Result;
+            if (string.IsNullOrWhiteSpace(id))
+                return BadRequest();
+            var user = await _userManger.Users.FirstOrDefaultAsync(x => x.Id == id);
             if (user is not null)
             {
                 var UserDetailsDto = new UserDetailsDto()
@@ -110,27 +114,80 @@ namespace Demo.presentation.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<IActionResult> ConfirmDelete(string id)
-        {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+        //[HttpPost]
+        //public async Task<IActionResult> ConfirmDelete(string id)
+        //{
+        //    if (!User.Identity.IsAuthenticated)
+        //    {
+        //        return RedirectToAction("Login", "Account");
+        //    }
 
+        //    if (string.IsNullOrWhiteSpace(id))
+        //        return BadRequest();
+
+        //    try
+        //    {
+        //        var currentUser = await _userManger.GetUserAsync(User);
+
+        //        if (currentUser is null)
+        //        {
+        //            TempData["ErrorMessage"] = "Current user not found.";
+        //            return RedirectToAction("Login", "Account");
+        //        }
+
+        //        var user = await _userManger.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+        //        if (user is null)
+        //        {
+        //            TempData["ErrorMessage"] = "User not found.";
+        //            return RedirectToAction(nameof(Index));
+        //        }
+
+        //        var result = await _userManger.DeleteAsync(user);
+
+        //        if (result.Succeeded)
+        //        {
+        //            if (user.Id == currentUser.Id)
+        //                return RedirectToAction("Login", "Account");
+
+        //            TempData["SuccessMessage"] = "User deleted successfully!";
+        //            return RedirectToAction("Index");
+        //        }
+
+        //        TempData["ErrorMessage"] = "Failed to delete user!";
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (_webHostEnvironment.IsDevelopment())
+        //        {
+        //            TempData["ErrorMessage"] = ex.Message;
+        //            return RedirectToAction(nameof(Index));
+        //        }
+        //        else
+        //        {
+        //            _logger.LogError(ex.Message);
+        //            return View("ErrorView", ex);
+        //        }
+        //    }
+        //}
+
+        //[ActionName("Delete")] // Use the same action name for clarity
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> ConfirmDelete( string id)
+        {
             if (string.IsNullOrWhiteSpace(id))
-                return BadRequest();
+            {
+                TempData["ErrorMessage"] = "Invalid user ID.";
+                return RedirectToAction(nameof(Index));
+            }
 
             try
             {
-                var currentUser = await _userManger.GetUserAsync(User);
-
-                if (currentUser is null)
-                {
-                    TempData["ErrorMessage"] = "Current user not found.";
-                    return RedirectToAction("Login", "Account");
-                }
-
+                var loginUser = await _userManger.GetUserAsync(User);
                 var user = await _userManger.Users.FirstOrDefaultAsync(x => x.Id == id);
 
                 if (user is null)
@@ -143,28 +200,29 @@ namespace Demo.presentation.Controllers
 
                 if (result.Succeeded)
                 {
-                    if (user.Id == currentUser.Id)
+                    if (loginUser != null && user.Id == loginUser.Id)
+                    {
+                        await _signInManager.SignOutAsync();
+                        TempData["SuccessMessage"] = "Your account has been deleted.";
                         return RedirectToAction("Login", "Account");
+                    }
 
-                    TempData["SuccessMessage"] = "User deleted successfully!";
-                    return RedirectToAction("Index");
+                    TempData["SuccessMessage"] = "User deleted successfully.";
+                    return RedirectToAction(nameof(Index));
                 }
 
-                TempData["ErrorMessage"] = "Failed to delete user!";
+                TempData["ErrorMessage"] = "Failed to delete user.";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                if (_webHostEnvironment.IsDevelopment())
-                {
-                    TempData["ErrorMessage"] = ex.Message;
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    _logger.LogError(ex.Message);
-                    return View("ErrorView", ex);
-                }
+                _logger.LogError(ex, "Error deleting user with ID: {UserId}", id);
+
+                TempData["ErrorMessage"] = _webHostEnvironment.IsDevelopment()
+                    ? ex.Message + $" User ID: {id}"
+                    : "An error occurred while deleting the user.";
+
+                return RedirectToAction(nameof(Index));
             }
         }
 

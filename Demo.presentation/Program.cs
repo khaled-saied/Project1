@@ -8,6 +8,7 @@ using Demo.DAL.Repositories.Classes;
 using Demo.DAL.Repositories.Interfaces;
 using Demo.presentation.Helper;
 using Demo.presentation.Settings;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -62,10 +63,12 @@ namespace Demo.presentation
                 options.LoginPath = "/Account/Login";
             });
 
+            // Mail Settings
             builder.Services.Configure<MailSettings>(
                 builder.Configuration.GetSection("MailSettings")
             );
 
+            //Sms Settings
             builder.Services.Configure<SmsSettings>(
                 builder.Configuration.GetSection("Twilio")
             );
@@ -77,16 +80,31 @@ namespace Demo.presentation
 
 
 
-            builder.Services.AddAuthentication(o =>
+            builder.Services.AddAuthentication(options =>
             {
-                o.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
-                o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-            }).AddGoogle(o=>
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            })
+            .AddCookie()
+            .AddGoogle(options =>
             {
-                IConfiguration GooleConfiguration = builder.Configuration.GetSection("Authentication:Google");
-                o.ClientId = GooleConfiguration["ClientId"];
-                o.ClientSecret = GooleConfiguration["ClientSecret"];
+                var config = builder.Configuration.GetSection("Authentication:Google");
+                options.ClientId = config["ClientId"];
+                options.ClientSecret = config["ClientSecret"];
             });
+
+
+
+            //builder.Services.AddAuthentication(o =>
+            //{
+            //    o.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+            //    o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            //}).AddGoogle(o =>
+            //{
+            //    var GooleConfiguration = builder.Configuration.GetSection("Authentication:Google");
+            //    o.ClientId = GooleConfiguration["ClientId"];
+            //    o.ClientSecret = GooleConfiguration["ClientSecret"];
+            //});
 
             #endregion
 
@@ -106,8 +124,10 @@ namespace Demo.presentation
 
             app.UseRouting();
 
+
             app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.MapControllerRoute(
                 name: "default",

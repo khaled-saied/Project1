@@ -1,14 +1,69 @@
-﻿
-@{
-    ViewData["Title"] = "CheckYourInbox";
+﻿@{
+    ViewData["Title"] = "Check Your Inbox";
     Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
 
-<h1>CheckYourInbox</h1>
+<div class="check-inbox-container">
+    <h1 class="check-inbox-title">Check Your Inbox</h1>
 
-<div class="main-agileinfo">
-    <div class="agileinfo-top">
-        <p>Check Your InBox</p>
-        <p><a href="https://mail.google.com/mail/u/0/#inbox">Co To Your InBox</a></p>
+    <div class="check-inbox-message">
+        <p class="message-text">We have sent a link to your inbox. Please check your email to proceed.</p>
+        <p class="message-text">
+            <a href="https://mail.google.com/mail/u/0/#inbox" class="inbox-link">Go to Your Inbox</a>
+        </p>
     </div>
 </div>
+
+
+@* Style *@
+<style>
+    .check-inbox-container {
+        background: linear-gradient(to right, #f8f9fa, #e0eafc);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .check-inbox-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 30px;
+    }
+
+    .check-inbox-message {
+        background-color: #ffffff;
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .message-text {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .inbox-link {
+        color: #4f6ef7;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 16px;
+        padding: 10px 20px;
+        background-color: #f1f1f1;
+        border-radius: 8px;
+        transition: background 0.3s ease-in-out;
+    }
+
+        .inbox-link:hover {
+            background-color: #4f6ef7;
+            color: #fff;
+        }
+
+</style>
